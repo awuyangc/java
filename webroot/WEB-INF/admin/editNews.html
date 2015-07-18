@@ -1,0 +1,183 @@
+
+<script type="text/javascript" src="js/editNews.js"></script>
+<!-- content starts -->
+<div class="ch-container">
+	<div class="row">
+		<div id="content" class="col-lg-12 col-sm-12">
+			<div>
+				<ul class="breadcrumb">
+					<li><a href="#">Home</a></li>
+					<li><a href="#">新闻管理</a></li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="box col-md-12">
+					<div class="box-inner">
+						<div class="box-header well" data-original-title="">
+							<h2>
+								<i class="glyphicon glyphicon-user"></i> 新闻列表
+							</h2>
+
+							<div class="box-icon">
+								<a href="#"
+									class="btn btn-minimize btn-round btn-default"><i
+									class="glyphicon glyphicon-chevron-up"></i></a> <a href="#"
+									class="btn btn-close btn-round btn-default"><i
+									class="glyphicon glyphicon-remove"></i></a>
+							</div>
+						</div>
+						<div class="box-content">
+						<div class="row-fluid" style="margin-bottom:5px;text-align:right">
+						</div>
+							<table id="myTable" class="table dataTable bootstrap-datatable table-bordered" >
+								<thead>
+									<tr>
+										<th>新闻id</th>
+										<th>新闻标题</th>
+										<th>新闻类型id</th>
+										<th>新闻类型</th>
+										<th>发布情况</th>
+										<th>置顶情况</th>
+										<th>创建时间</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- content end -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" style="width:800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改新闻</h4>
+            </div>
+            <div class="modal-body">
+           <div class="form-horizontal">
+					  <div class="form-group">
+					  <div id="newsId" class="hidden"></div>
+					</div>
+					  <div class="form-group">
+					    <label for="title" class="col-sm-1 control-label">标题</label>
+					    <div class="col-sm-11">
+					      <input type="text" class="form-control" id="newsTitle" placeholder="请填写标题">
+					    </div>
+					  </div>
+					  <div class="form-group">
+	               		<label class="col-sm-1 control-label">类型</label>
+	               		<div class="col-sm-3">
+	                	  <select id="typeId" class="form-control">
+						  </select>
+			     		 </div>
+		               </div>
+		               <div class="form-group">
+					    <label for="title" class="col-sm-1 control-label">附件</label>
+					    <div class="col-sm-11">
+					     <input id="file_upload" type="file" name="file_upload" />
+					     <div id="file_queue" class="hidden"></div>
+					    </div>
+					  </div>
+ 					  <div class="form-group">
+	               		<label class="col-sm-1 control-label">内容</label>
+	               		<div class="col-sm-11">
+	                			<div id="alerts"></div>
+							    <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+							      <div class="btn-group">
+							        <a class="btn dropdown-toggle" data-toggle="dropdown" title="字体"><i class="icon-font"></i><b class="caret"></b></a>
+							          <ul class="dropdown-menu">
+							          </ul>
+							        </div>
+							      <div class="btn-group">
+							        <a class="btn dropdown-toggle" data-toggle="dropdown" title="字号"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
+							          <ul class="dropdown-menu">
+							          <li><a data-edit="fontSize 6"><font size="6">6号</font></a></li>
+							          <li><a data-edit="fontSize 5"><font size="5">5号</font></a></li>
+							          <li><a data-edit="fontSize 4"><font size="4">4号</font></a></li>
+							          <li><a data-edit="fontSize 3"><font size="3">3号</font></a></li>
+							          <li><a data-edit="fontSize 2"><font size="2">2号</font></a></li>
+							          <li><a data-edit="fontSize 1"><font size="1">1号</font></a></li>
+							          </ul>
+							      </div>
+							      <div class="btn-group">
+							        <a class="btn" data-edit="bold" title="加粗 (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+							        <a class="btn" data-edit="italic" title="斜体 (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
+							        <a class="btn" data-edit="strikethrough" title="删除线"><i class="icon-strikethrough"></i></a>
+							        <a class="btn" data-edit="underline" title="下划线 (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+							      </div>
+							      <div class="btn-group">
+							        <a class="btn" data-edit="insertunorderedlist" title=""><i class="icon-list-ul"></i></a>
+							        <a class="btn" data-edit="insertorderedlist" title=""><i class="icon-list-ol"></i></a>
+							        <a class="btn" data-edit="outdent" title=""><i class="icon-indent-left"></i></a>
+							        <a class="btn" data-edit="indent" title=""><i class="icon-indent-right"></i></a>
+							      </div>
+							      <div class="btn-group">
+							        <a class="btn" data-edit="justifyleft" title=""><i class="icon-align-left"></i></a>
+							        <a class="btn" data-edit="justifycenter" title=""><i class="icon-align-center"></i></a>
+							        <a class="btn" data-edit="justifyright" title=""><i class="icon-align-right"></i></a>
+							        <a class="btn" data-edit="justifyfull" title=""><i class="icon-align-justify"></i></a>
+							      </div>
+							      <!-- 
+								   <div class="btn-group">
+									  <a class="btn dropdown-toggle" data-toggle="dropdown" title=""><i class="icon-link"></i></a>
+									    <div class="dropdown-menu input-append">
+										    <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+										    <button class="btn" type="button">Add</button>
+							        </div>
+							      </div> -->
+							      
+							      <div class="btn-group">
+							        <a class="btn" title="插入图片" id="pictureBtn"><i class="icon-picture"></i></a>
+        							<input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 41px; height: 38px;"/>
+							      </div>
+							      <div class="btn-group">
+							        <a class="btn" data-edit="undo" title=""><i class="icon-undo"></i></a>
+							        <a class="btn" data-edit="redo" title=""><i class="icon-repeat"></i></a>
+							      </div>
+							      <!-- <input type="text" data-edit="inserttext" id="voiceBtn" x-webkit-speech=""> -->
+							    </div>						
+							    <div id="editor">
+							    </div>
+							    
+			     		</div>
+		               </div>
+					</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="btnSave">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除时的Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">注意</h4>
+            </div>
+            <div class="modal-body">
+           			<div class="alert alert-danger" role="alert">确定要删除此新闻吗？</div>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-primary" id="del">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,114 @@
+
+<script type="text/javascript" src="js/carousel.js"></script>
+<div class="ch-container">
+	<div class="row">
+	<div class="box col-md-12">
+		<div class="box-inner">
+			<div class="box-header well" data-original-title="">
+				<h2>
+					<i class="glyphicon glyphicon-user"></i> 图片轮播列表
+				</h2>
+
+				<div class="box-icon">
+					<a href="#"
+						class="btn btn-minimize btn-round btn-default"><i
+						class="glyphicon glyphicon-chevron-up"></i></a> <a href="#"
+						class="btn btn-close btn-round btn-default"><i
+						class="glyphicon glyphicon-remove"></i></a>
+				</div>
+			</div>
+			<div class="box-content">
+			<div class="row-fluid" style="margin-bottom:5px;text-align:right">
+			</div>
+				<table id="myTable" class="table dataTable bootstrap-datatable table-bordered" >
+					<thead>
+						<tr>
+							<th>图片id</th>
+							<th>图片标题</th>
+							<th>图片排序</th>
+							<th>图片名称</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+<!-- content end -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" style="width:800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改图片轮播</h4>
+            </div>
+            <div class="modal-body">
+           <div class="form-horizontal">
+					  <div class="form-group">
+					  <div id="picId" class="hidden"></div>
+					</div>
+					  <div class="form-group">
+					    <label for="title" class="col-sm-1 control-label">标题</label>
+					    <div class="col-sm-11">
+					      <input type="text" class="form-control" id="picTitle" placeholder="请填写标题">
+					    </div>
+					  </div>
+					  <div class="form-group">
+	               		<label class="col-sm-1 control-label">排序</label>
+	               		<div class="col-sm-3">
+	                	  <select id="picOrder" class="form-control">
+	                	  	<option value='1'>1</option>
+	                	 	<option value='2'>2</option>
+	                	 	<option value='3'>3</option>
+	                	 	<option value='4'>4</option>
+	                	 	<option value='5'>5</option>
+	                	 	<option value='6'>6</option>
+	                	 	<option value='7'>7</option>
+	                	 	<option value='8'>8</option>
+	                	 	<option value='9'>9</option>
+	                	 	<option value='10'>10</option>
+						  </select>
+			     		 </div>
+		               </div>
+		               <div class="form-group">
+					    <label for="title" class="col-sm-1 control-label">附件</label>
+					    <div class="col-sm-11">
+					     <input id="file_upload" type="file" name="file_upload" />
+					     <div id="file_queue" class="hidden"></div>
+					    </div>
+					  </div>
+					</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="btnSave">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除时的Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">注意</h4>
+            </div>
+            <div class="modal-body">
+           			<div class="alert alert-danger" role="alert">确定要删除此图片吗？</div>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-primary" id="del">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
