@@ -30,8 +30,8 @@ public class BaseController {
 	
 	
 	@RequestMapping("/signUp")
-	public String toSignUp(){
-		return "signUp.html?rd="+Math.random();
+	public String toSignUp(String inviteId){
+		return "signUp.html?inviteId="+inviteId+"&rd="+Math.random();
 	}
 	
 	

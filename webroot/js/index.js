@@ -55,7 +55,7 @@
 		
 		 // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
 		wx.ready(function(){
-			wx.hideOptionMenu();
+			//wx.hideOptionMenu();
 		});
 
 		wx.error(function(res){
@@ -87,8 +87,8 @@
  
 function initInvite()
 {
-	//WeixinJSBridge.call('hideOptionMenu');
-	wx.hideOptionMenu();
+	
+	//wx.hideOptionMenu();
 	$("#invite-day").mobiscroll().date({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
 	$("#invite-begin").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
 	$("#invite-end").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
@@ -209,7 +209,6 @@ function unloadRrestaurantDetail()
 
 function initConfirmInvite()
 {
-	alert();
 	wx.hideOptionMenu();
 	//用户邀请单的相关信息
 	var inviteId=$("#inviteId").val();
@@ -249,7 +248,7 @@ function shareInvite()
 	wx.onMenuShareAppMessage({
 	    title: '一伙锅', // 分享标题
 	    desc: '您的好友 '+nickname+' 邀请您参加一伙锅！', // 分享描述
-	    link: 'http://awuyangc.xicp.net/origin/#signUp?inviteId='+inviteId, // 分享链接
+	    link: 'http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
 	    imgUrl: 'http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg', // 分享图标
 	    type: '', // 分享类型,music、video或link，不填默认为link
 	    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空

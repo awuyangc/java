@@ -80,7 +80,7 @@ public class TokenController {
 	}
 	
 	@RequestMapping(value = "/oauth2Check" ,method = RequestMethod.GET, produces = "text/plain")
-	public String oauth2Check(String code) throws IOException{
+	public String oauth2Check(String code,String inviteId) throws IOException{
 		
 		//查询数据库的access_token看是否过期
 		AccessToken accessToken=accessTokenService.getAccessTokenById(1);
@@ -104,13 +104,13 @@ public class TokenController {
 		
 		
 		String appid="wx6d373275087fc071";
-		String redirect_uri="http://awuyangc.xicp.net/origin/weixin/getToken.action?random="+Math.random();
+		String redirect_uri="http://awuyangc.xicp.net/origin/weixin/getToken.action?inviteId="+inviteId+"&random="+Math.random();
 		return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&"+ 
 					"redirect_uri="+redirect_uri+"&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
 	}
 	
 	@RequestMapping(value = "/getToken" ,method = RequestMethod.GET, produces = "text/plain")
-	public String getToken(String code,SNSUserInfo snsUserInfo,WeixinUser weixinUser,HttpSession session) throws IOException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
+	public String getToken(String code,SNSUserInfo snsUserInfo,WeixinUser weixinUser,HttpSession session,String inviteId) throws IOException, IllegalAccessException, InvocationTargetException, NoSuchMethodException{
 		// 用户同意授权
 		if (!"authdeny".equals(code)) {
 			// 网页授权接口访问凭证
@@ -131,7 +131,15 @@ public class TokenController {
 				weixinUserService.insert(weixinUser);
 			}
 		}
-		return "redirect:/index.action";
+		if(inviteId!=""&&inviteId!=null)
+		{
+			return "redirect:/signUp.action?inviteId="+inviteId;
+		}
+		else
+		{
+			return "redirect:/index.action";
+		}
+		
 	}
 	
 	@RequestMapping("/getSession")
