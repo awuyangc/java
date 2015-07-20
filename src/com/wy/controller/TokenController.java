@@ -3,11 +3,13 @@ package com.wy.controller;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.HttpCookie;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,6 +24,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -102,7 +105,6 @@ public class TokenController {
 		updateTicket(jsapiTicket.getTicket());
 		}
 		
-		
 		String appid="wx6d373275087fc071";
 		String redirect_uri="http://awuyangc.xicp.net/origin/weixin/getToken.action?inviteId="+inviteId+"&random="+Math.random();
 		return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&"+ 
@@ -120,6 +122,7 @@ public class TokenController {
 			String openId = weixinOauth2Token.getOpenId();
 			// 获取用户信息
 			snsUserInfo = AdvancedUtil.getSNSUserInfo(weixinOauth2Token.getAccessToken(),openId);
+			//设置session
 			session.setAttribute("snsUserInfo", snsUserInfo);
 			//查找本地用户，如果不存在，则记录用户
 			weixinUser=weixinUserService.getWeixinUserByOpenId(openId);
@@ -131,7 +134,7 @@ public class TokenController {
 				weixinUserService.insert(weixinUser);
 			}
 		}
-		if(inviteId!=""&&inviteId!=null)
+		if(inviteId!=""&&inviteId!=null&&!inviteId.equals("null"))
 		{
 			return "redirect:/signUp.action?inviteId="+inviteId;
 		}

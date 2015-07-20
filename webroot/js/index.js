@@ -79,11 +79,6 @@
 	     });  
 
 });
-
- function initMain()
- {
-	
- }
  
 function initInvite()
 {
@@ -277,6 +272,18 @@ function shareInvite()
 	});
 }
 
+function initSignUp()
+{
+	var inviteId=GetQueryString("inviteId");
+	$.ajax({
+        url: "getInviteInfo.action",
+        data:{"inviteId":inviteId},
+        success: function (data) {
+        	$("#inviteSignInfo").html("您的好友XXX邀请您 "+data.inviteDay+" 一伙锅");
+        }
+    });  
+}
+
 function initInviteInfo()
 {
 	wx.hideOptionMenu();
@@ -313,3 +320,9 @@ function dispatchPanelEvent(fnc,myPanel){
     return dispatchPanelEvent(hasLoad,e.target);
     }
  })
+ 
+  function GetQueryString(name) {
+	   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+	   var r = window.location.search.substr(1).match(reg);
+	   if (r!=null) return (r[2]); return null;
+	}
