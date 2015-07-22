@@ -20,6 +20,11 @@ import com.wy.service.IInviteInfoService;
 @RequestMapping("/")
 public class BaseController {
 //*********************************************首页***********************************************
+	@RequestMapping("/login")
+	public String toLogin(){
+		return "login.html?rd="+Math.random();
+	}
+	
 	@Resource
 	private IInviteInfoService inviteInfoService;
 	
@@ -27,7 +32,6 @@ public class BaseController {
 	public String toIndex(){
 		return "index.html?rd="+Math.random();
 	}
-	
 	
 	@RequestMapping("/signUp")
 	public String toSignUp(String inviteId){

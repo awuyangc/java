@@ -1,7 +1,8 @@
  $.afui.autoLaunch=false;
- $.afui.useOSThemes=false;
+$.afui.useOSThemes=false;
  /* This function runs when the content is loaded.*/
  $(document).ready(function(){
+	
 	//获取js开发许可
 	 	$.ajax({
 	        url: "weixin/sign.action",
@@ -75,6 +76,7 @@
 	        	 $("#userNickNameSplash").text("您好！"+data.nickname);
 	        	 $("#openId").val(data.openId);
 	        	 $("#nickname").val(data.nickname);
+	        	 localStorage.setItem("eHuoguoOpenId",data.openId);
 	         }
 	     });  
 
@@ -243,7 +245,7 @@ function shareInvite()
 	wx.onMenuShareAppMessage({
 	    title: '一伙锅', // 分享标题
 	    desc: '您的好友 '+nickname+' 邀请您参加一伙锅！', // 分享描述
-	    link: 'http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
+	    link: 'http://awuyangc.xicp.net/origin/login.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
 	    imgUrl: 'http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg', // 分享图标
 	    type: '', // 分享类型,music、video或link，不填默认为link
 	    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
