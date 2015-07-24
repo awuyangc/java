@@ -8,17 +8,123 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" type="text/css" href="js/appframework/build/af.ui.css">
 <script type="text/javascript" charset="utf-8" src="js/jquery/jquery.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/appframework/build/appframework.ui.js"></script>
 <script type="text/javascript" src="js/login.js"></script>
 
 
 
 </head>
 <body>
-<div>
- 登陆中，请稍后......
+<div id="afui" class="ios7">
+ <div id="splashscreen" class="ui-loader heavy">
+        <font id="userNickNameSplash"></font>
+        <br>
+        <br>
+        <span class="ui-icon ui-icon-loading spin"></span>
+        <h1>一伙锅准备中</h1>
+    </div>
+ 
+    <div class="view" id="mainview">
+        <header>
+            <h1>Tab View</h1>
+        </header>
+ 
+        <div class="pages">
+ 
+         <!--Tab View Pages-->
+        <div class="panel" data-title="主页" id="main" data-selected="true" data-load='initMain'>
+             <div style="margin-top:20px">欢迎您！<font color="red" id="userNickName"></font></div>  
+             <div>
+	           	<div style="float:left;width:50%;"><a class="button icon phone" href="#invite">立即邀约朋友</a></div>
+	           	<div style="float:right;width:50%;"><a class="button icon info" href="#inviteInfoList">查看邀约信息</a></div>
+	         </div> 
+	         <div>
+	           	<div style="float:left;width:50%"><a class="button icon heart" href="#invite">设置我的偏好</a></div>
+	           	<div style="float:right;width:50%"><a class="button icon mail" href="#invite">我的订单</a></div>
+	         </div> 
+	         <div>
+	           	<div style="float:left;width:50%"><a class="button icon user" href="#invite">我的账号</a></div>
+	           	<div style="float:right;width:50%"><a class="button icon tools" href="#invite">其他</a></div>
+	         </div>      
+        </div>
+ 
+        <div class="panel" data-title="确认邀请时间" id="invite" data-load='initInvite'>
+	         <div>
+				 <p style="text-align:center">
+				 	请确定一伙锅的时间！
+				 </p>
+			 </div>
+			 <div>选择日期：</div>
+			 <div>
+			 <input type="text" id="invite-day" required="required"/>
+			 </div>
+			 <div> 选择时间段：</div>
+			 <div>
+			 	<input type="text" id="invite-begin" required="required"/>至 <input type="text" id="invite-end" required="required"/>
+			 </div>
+			 <div style="text-align:right"><a href="#restaurant" class="button" id="btnChooseArea">去选择地点</a></div>
+		</div>
+ 
+        <div class="panel" data-title="选择餐厅" id="restaurant" data-load='initRestaurant' style="overflow:hidden" >
+			<div class="grid">
+				<div style="width:20%;float:left;font-size:20px;text-align:center">区域</div>
+				<div style="width:20%;float:left;font-size:20px;text-align:center">风味</div>
+				<div style="width:20%;float:left;font-size:20px;text-align:center">价格</div>
+				<div style="width:20%;float:left;font-size:20px;text-align:center">评级</div>
+				<div style="width:20%;float:left;font-size:20px;text-align:center">其它</div>
+			</div>
+            <div>
+           · <style>
+	            #listRestaurant li a img 
+	            {
+	            	width: 80px; height: 80px; float: left;
+	            }
+	           </style>
+	            <ul class="list" id="listRestaurant">
+				</ul>
+            </div>
+        </div>
+ 
+        <div class="panel"  data-title="餐厅地图定位" id="restaurantDetail" data-load='initRrestaurantDetail' data-unload='unloadRrestaurantDetail'>    
+            <div id="mapContainer" style="height:350px">
+				
+			</div>
+			<div style="text-align:right">
+			  <a href="#confirmInvite" id="btnChooseRestaurant" class="button">选中</a>
+			</div>
+        </div>
+ 		
+ 		<div class="panel"  data-title="您的邀请信息" id="confirmInvite" data-load='initConfirmInvite'>    
+			<div id="inviteInfo"></div>
+			<div id="btnDiv" style="text-align:right">
+			 <a href="#shareInvite" id="btnConfirmInvite" class="button">确认信息</a>
+			</div>
+        </div>
+        
+        <div class="panel"  data-title="邀请您的朋友" id="shareInvite" data-load='shareInvite'>    
+			<div id="shareInfo" style="font-family:'黑体';font-size:20px;margin-top:100px">邀请信息已提交，请点击右上角按钮来邀请朋友吧！</div>
+        </div>
+        
+        <div class="panel"  data-title="邀约信息" id="inviteInfoList" data-load='initInviteInfo'>    
+			
+        </div>
+        
+        
+       </div>
+ 
+        <footer>
+            <a href="#main" class="icon home" id="Home">主页</a>
+            <!-- <a href="#foobar" class="icon heart" id="tab2" data-transition="up-reveal">Foobar</a>
+            <a href="#about" class="icon html5" id="tab3" data-transition="slide-left">About</a>
+            <a href="#test" class="icon trash" id="tab4" data-transition="none">test</a> -->
+        </footer>
+    </div>
 </div>
+<!-- 隐藏域 -->
+<div><input type="hidden" value="" id="inviteId"/></div>
+<div><input type="hidden" value="" id="restaurantId"/></div>
+<div><input type="hidden" value="" id="restaurantName"/></div>
+<div><input type="hidden" value="" id="openId"/></div>
+<div><input type="hidden" value="" id="nickname"/></div>
 </body>
 </html>

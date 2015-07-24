@@ -127,8 +127,6 @@ public class MenuManager {
 		btn35.setType("view");
 		btn35.setUrl("http://www.baidu.com/");
 		*/
-		
-		/*
 		ViewButton btn11 = new ViewButton();
 		btn11.setName("立即邀约好友");
 		btn11.setType("view");
@@ -174,33 +172,6 @@ public class MenuManager {
 		 * 比如，第三个一级菜单项不是“更多体验”，而直接是“幽默笑话”，那么menu应该这样定义：<br>
 		 * menu.setButton(new Button[] { mainBtn1, mainBtn2, btn33 });
 		 */
-		ViewButton btn11 = new ViewButton();
-		btn11.setName("立即邀约好友");
-		btn11.setType("view");
-		btn11.setUrl("http://awuyangc.xicp.net/origin/index.action?rn="+Math.random());
-		
-		ViewButton btn12 = new ViewButton();
-		btn12.setName("查看我的邀约");
-		btn12.setType("view");
-		btn12.setUrl("http://awuyangc.xicp.net/origin/index.action?rn="+Math.random());
-		
-		ViewButton btn13 = new ViewButton();
-		btn13.setName("设置我的偏好");
-		btn13.setType("view");
-		btn13.setUrl("http://awuyangc.xicp.net/origin/index.action?rn="+Math.random());
-		
-		ViewButton btn21 = new ViewButton();
-		btn21.setName("如何使用一伙锅");
-		btn21.setType("view");
-		btn21.setUrl("http://www.baidu.com/");
-		
-		ComplexButton mainBtn1 = new ComplexButton();
-		mainBtn1.setName("火锅走起");
-		mainBtn1.setSub_button(new Button[] { btn11, btn12, btn13});
-		
-		ComplexButton mainBtn2 = new ComplexButton();
-		mainBtn2.setName("帮助");
-		mainBtn2.setSub_button(new Button[] { btn21});
 		Menu menu = new Menu();
 		menu.setButton(new Button[] { mainBtn1, mainBtn2});
 		return menu;

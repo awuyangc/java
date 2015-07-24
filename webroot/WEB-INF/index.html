@@ -38,32 +38,30 @@
 <script src="js/mobiscroll/js/mobiscroll.frame.android-holo.js"></script>
 <script src="js/mobiscroll/js/i18n/mobiscroll.i18n.zh.js"></script>
 
-
-
 <script type="text/javascript" src="js/index.js"></script>
 
-
 <style>
-     #listRestaurant li a img 
-     {
-     	width: 80px; height: 80px; float: left;
-     }
- </style>
+        #listRestaurant li a img 
+        {
+        	width: 80px; height: 80px; float: left;
+        }
+</style>
+
+
 </head>
 <body>
 <div id="afui" class="ios7">
+
  <div id="splashscreen" class="ui-loader heavy">
         <font id="userNickNameSplash"></font>
         <br>
         <br>
         <span class="ui-icon ui-icon-loading spin"></span>
-        <h1 id="welcomeInfo">一伙锅准备中</h1>
+        <h1>一伙锅准备中</h1>
     </div>
  
     <div class="view" id="mainview">
-        <header>
-            <h1>Tab View</h1>
-        </header>
+      
  
         <div class="pages">
  
@@ -84,7 +82,7 @@
 	         </div>      
         </div>
  
-        <div class="panel" data-title="确认邀请时间" id="invite" data-load='initInvite'>
+        <div class="panel" id="invite" data-load='initInvite' data-header="inviteHeader">
 	         <div>
 				 <p style="text-align:center">
 				 	请确定一伙锅的时间！
@@ -98,7 +96,7 @@
 			 <div>
 			 	<input type="text" id="invite-begin" required="required"/>至 <input type="text" id="invite-end" required="required"/>
 			 </div>
-			 <div style="text-align:right"><a href="#restaurant" class="button" id="btnChooseArea">去选择地点</a></div>
+				<a href="#restaurant" class="button next" id="btnChooseArea" style="float:right">去选择地点</a>
 		</div>
  
         <div class="panel" data-title="选择餐厅" id="restaurant" data-load='initRestaurant' style="overflow:hidden" >
@@ -109,7 +107,7 @@
 				<div style="width:20%;float:left;font-size:20px;text-align:center">评级</div>
 				<div style="width:20%;float:left;font-size:20px;text-align:center">其它</div>
 			</div>
-            <div>   	 
+            <div>
 	            <ul class="list" id="listRestaurant">
 				</ul>
             </div>
@@ -148,6 +146,7 @@
             <a href="#about" class="icon html5" id="tab3" data-transition="slide-left">About</a>
             <a href="#test" class="icon trash" id="tab4" data-transition="none">test</a> -->
         </footer>
+        
     </div>
 </div>
 <!-- 隐藏域 -->

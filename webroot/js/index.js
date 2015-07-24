@@ -1,48 +1,8 @@
-$.afui.autoLaunch=false;
-$.afui.useOSThemes=false;
+ $.afui.autoLaunch=false;
+ $.afui.useOSThemes=false;
 
-
-
-var inviteId=GetQueryString("inviteId");
-var nickname="";
-var openId="";
-$.ajax({
-	async: false,
-    url: "weixin/getSession.action",
-    success: function (data) {
-    	if(data.openId==undefined)
-    	{
-    		if(inviteId!=""&&inviteId!=""&&inviteId!=null&&!inviteId!="null")
-			{
-    			window.location.href="weixin/oauth2Check.action?inviteId="+inviteId;
-			}
-    		else
-			{
-    			window.location.href="weixin/oauth2Check.action";
-			}
-    	}
-    	else
-		{
-    		nickname=data.nickname;
-    		openId=data.openId;
-    		if(inviteId!=""&&inviteId!=""&&inviteId!=null&&inviteId!="null")
-			{
-    			$("#welcomeInfo").text("快来报名吧！");
-    			window.location.href="#inviteInfoList";
-    			//$.afui.loadContent("#inviteInfoList",false,false,"up");
-			}
-		}
-    }
-});  
  /* This function runs when the content is loaded.*/
  $(document).ready(function(){
-	 
-	 $("#userNickName").text(nickname);
-	 $("#userNickNameSplash").text("您好！"+nickname);
-	 $("#welcomeInfo").text("欢迎访问一伙锅！");
-	 $("#openId").val(openId);
-	 $("#nickname").val(nickname);
-	 
 	//获取js开发许可
 	 	$.ajax({
 	        url: "weixin/sign.action",
@@ -109,22 +69,38 @@ $.ajax({
 	     {
 		 	$("#afui").removeClass("ios");
 	     }
+		$.ajax({
+	         url: "weixin/getSession.action",
+	         success: function (data) {
+	        	 $("#userNickName").text(data.nickname);
+	        	 $("#userNickNameSplash").text("您好！"+data.nickname);
+	        	 $("#openId").val(data.openId);
+	        	 $("#nickname").val(data.nickname);
+	         }
+	     });  
+
 });
  
 function initInvite()
 {
-	
-	wx.hideOptionMenu();
+	 //$.afui.loadDiv("#inviteInfoList",false,false,"up")
+	//wx.hideOptionMenu();
 	$("#invite-day").mobiscroll().date({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
 	$("#invite-begin").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
 	$("#invite-end").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
-	$("#btnChooseArea").click(function (){
+	$("#btnChooseArea").unbind().click(function (){
 		var inviteDay=$("#invite-day").val();
 		var inviteBegin=$("#invite-begin").val();
 		var inviteEnd=$("#invite-end").val();
 		if(inviteDay==""||inviteBegin==""||inviteEnd=="")
 			{
-				alert("请将信息填写完整");
+				$.afui.toast({
+				    message:"请将信息填写完整",
+				    position:"tc",
+				    delay:1500,
+				    autoClose:true, //have to click the message to close
+				    type:"error"
+				});
 				return false;
 			}
 	});
@@ -245,10 +221,9 @@ function initConfirmInvite()
 	var inviteAddress=$('#restaurantId').val();
 	$("#inviteInfo").html("<font>您的邀请单详细信息如下：<br>日期："+inviteDay+"<br>时间段："+inviteBegin+" 到 "+inviteEnd+"<br>地点:"+$('#restaurantName').val()+"</font>");
 	//保存邀请单相关信息
-	$("#btnConfirmInvite").click(function(){
+	$("#btnConfirmInvite").unbind().click(function(){
 		
 		$.ajax({
-			async: false,
 	        url: "saveInviteInfo.action",
 	        data:{
 	        	  "id":inviteId,
@@ -269,14 +244,13 @@ function initConfirmInvite()
 
 function shareInvite()
 {
-	wx.showOptionMenu();
 	var inviteId=$("#inviteId").val();
 	var nickname=$("#nickname").val();
 	//分享给朋友
 	wx.onMenuShareAppMessage({
 	    title: '一伙锅', // 分享标题
 	    desc: '您的好友 '+nickname+' 邀请您参加一伙锅！', // 分享描述
-	    link: 'http://awuyangc.xicp.net/origin/index.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
+	    link: 'http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
 	    imgUrl: 'http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg', // 分享图标
 	    type: '', // 分享类型,music、video或link，不填默认为link
 	    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空

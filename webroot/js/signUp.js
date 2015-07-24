@@ -2,17 +2,6 @@
  $.afui.useOSThemes=false;
  /* This function runs when the content is loaded.*/
  $(document).ready(function(){
-	 $.ajax({
-         url: "weixin/getSession.action",
-         success: function (data) {
-        	 $("#userNickName").text(data.nickname);
-        	 $("#userNickNameSplash").text("您好！"+data.nickname);
-        	 $("#openId").val(data.openId);
-        	 $("#nickname").val(data.nickname);
-        	 setCookie('eHuoguoOpenId',data.openId,365);
-		   	 setCookie('eHuoguoNickname',data.nickname,365);
-         }
-     });  
 	//获取js开发许可
 	 	$.ajax({
 	        url: "weixin/sign.action",
@@ -79,6 +68,16 @@
 	     {
 		 	$("#afui").removeClass("ios");
 	     }
+		$.ajax({
+	         url: "weixin/getSession.action",
+	         success: function (data) {
+	        	 $("#userNickName").text(data.nickname);
+	        	 $("#userNickNameSplash").text("您好！"+data.nickname);
+	        	 $("#openId").val(data.openId);
+	        	 $("#nickname").val(data.nickname);
+	         }
+	     });  
+		
 		var inviteId=GetQueryString("inviteId");
 		$.ajax({
 			async: false,
@@ -92,10 +91,11 @@
 	    }); 
 		$.ajax({
 		   	dataType : "jsonp",
-		   		  url: "http://yuntuapi.amap.com/datasearch/id?tableid=55656259e4b0ccb608f13383&_id="+$("#restaurantId").val()+"&key=a46ffb73729bb688480643eea31387e7",
+		   		  url: "http://yuntuapi.amap.com/datasearch/id?tableid=55656259e4b0ccb608f13383&_id="+$("#restaurantId")+"&key=a46ffb73729bb688480643eea31387e7",
 		      success: function (result) {
 		       	 var listRestaurant="";
 		       	 $(result.datas).each(function(i,val){
+		       		 alert(val._id);
 		       		listRestaurant +='<li id="li'+val._id+'">'+
 						 			 '<a href="#restaurantDetail" onclick="$(\'#restaurantId\').val('+val._id+');$(\'#restaurantName\').val(\''+val._name+'\')">'+
 									 '<img src="'+val._image[0]._url+'">'+
@@ -152,29 +152,3 @@ function dispatchPanelEvent(fnc,myPanel){
 	   var r = window.location.search.substr(1).match(reg);
 	   if (r!=null) return (r[2]); return null;
 	}
- 
- //设置cookie
- function setCookie(c_name,value,expiredays)
- {
- var exdate=new Date()
- exdate.setDate(exdate.getDate()+expiredays)
- document.cookie=c_name+ "=" +escape(value)+
- ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
- }
-
- //取回cookie
- function getCookie(c_name)
- {
- if (document.cookie.length>0)
-   {
-   c_start=document.cookie.indexOf(c_name + "=")
-   if (c_start!=-1)
- 	{ 
- 	c_start=c_start + c_name.length+1 
- 	c_end=document.cookie.indexOf(";",c_start)
- 	if (c_end==-1) c_end=document.cookie.length
- 	return unescape(document.cookie.substring(c_start,c_end))
- 	} 
-   }
- return ""
- }
