@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-06-30 */
+/*! intel-appframework - v3.0.0 - 2015-07-13 */
 
 /**
  * af.shim.js
@@ -405,7 +405,7 @@ window.af=window.jq=jQuery;
                     $el.addClass("win8");
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $el.addClass("bb");
-                    that.backButtonText = "返回";
+                    that.backButtonText = "Back";
                 } else if ($.os.ios7){
                     $el.addClass("ios7");
                 } else if ($.os.ios)
@@ -1142,7 +1142,7 @@ window.af=window.jq=jQuery;
             if(items>=2&&isNewView!==true){
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
-                hdr.prepend("<a class='backButton back'>返回</a>");
+                hdr.prepend("<a class='backButton back'>Back</a>");
             }
             else {
                 hdr.find(".backButton").remove();
@@ -1184,7 +1184,12 @@ window.af=window.jq=jQuery;
             $.ajax(target).then(function(res){
                 var $res=$.create("div",{html:res});
                 if(!$res.hasClass(".panel")){
-                    $res=$res.attr("data-title",(target));
+                    if($(anchor).attr("data-title"))
+                        $res=$res.attr("data-title",anchor.getAttribute("data-title"));
+                    else if($(anchor).attr("title"))
+                        $res=$res.attr("data-title",anchor.getAttribute("title"));
+                    else
+                        $res=$res.attr("data-title",(target));
                     $res.prop("id",crc);
                     $res.addClass("panel");
                 }
@@ -2534,8 +2539,10 @@ window.af=window.jq=jQuery;
         target=$(e.target).closest(".swipe-content");
 
         width=target.closest(".swipe-reveal").find(".swipe-hidden").width();
-        if($.getCssMatrix(e.target).e===0)
-            return ;
+        if ($(e.target).parents('.swipe-content').length===0) {
+            if($.getCssMatrix(e.target).e===0)
+                return ;
+        }
         pos=touch.x2+width;
         target.bind("touchmove",tracker);
         target.one("touchend",function(){
@@ -2598,7 +2605,7 @@ window.af=window.jq=jQuery;
      */
     var preventAllButInputs = function(event, target) {
         var tag = target.tagName.toUpperCase();
-        if (tag.indexOf("SELECT") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
+        if (tag.indexOf("SELECT") > -1 || tag.indexOf("OPTION") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
             return;
         }
         preventAll(event);

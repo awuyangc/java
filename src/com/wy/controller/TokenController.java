@@ -117,6 +117,7 @@ public class TokenController {
 			// 获取用户信息
 			snsUserInfo = AdvancedUtil.getSNSUserInfo(weixinOauth2Token.getAccessToken(),openId);
 			//设置session
+			
 			session.setAttribute("snsUserInfo", snsUserInfo);
 			//查找本地用户，如果不存在，则记录用户
 			weixinUser=weixinUserService.getWeixinUserByOpenId(openId);
@@ -128,6 +129,8 @@ public class TokenController {
 				weixinUserService.insert(weixinUser);
 			}
 		}
+		return "redirect:/index.action?inviteId="+inviteId;
+		/*
 		if(inviteId!=""&&inviteId!=null&&!inviteId.equals("null"))
 		{
 			return "redirect:/signUp.action?inviteId="+inviteId;
@@ -136,7 +139,7 @@ public class TokenController {
 		{
 			return "redirect:/index.action";
 		}
-		
+		*/
 	}
 	
 	@RequestMapping("/getSession")

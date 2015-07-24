@@ -43,7 +43,12 @@
 <script type="text/javascript" src="js/index.js"></script>
 
 
-
+<style>
+     #listRestaurant li a img 
+     {
+     	width: 80px; height: 80px; float: left;
+     }
+ </style>
 </head>
 <body>
 <div id="afui" class="ios7">
@@ -52,7 +57,7 @@
         <br>
         <br>
         <span class="ui-icon ui-icon-loading spin"></span>
-        <h1>一伙锅准备中</h1>
+        <h1 id="welcomeInfo">一伙锅准备中</h1>
     </div>
  
     <div class="view" id="mainview">
@@ -104,13 +109,7 @@
 				<div style="width:20%;float:left;font-size:20px;text-align:center">评级</div>
 				<div style="width:20%;float:left;font-size:20px;text-align:center">其它</div>
 			</div>
-            <div>
-           · <style>
-	            #listRestaurant li a img 
-	            {
-	            	width: 80px; height: 80px; float: left;
-	            }
-	           </style>
+            <div>   	 
 	            <ul class="list" id="listRestaurant">
 				</ul>
             </div>

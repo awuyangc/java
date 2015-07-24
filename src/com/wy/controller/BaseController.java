@@ -29,8 +29,8 @@ public class BaseController {
 	private IInviteInfoService inviteInfoService;
 	
 	@RequestMapping("/index")
-	public String toIndex(){
-		return "index.html?rd="+Math.random();
+	public String toIndex(String inviteId){
+		return "index.html?inviteId="+inviteId+"&rd="+Math.random();
 	}
 	
 	@RequestMapping("/signUp")
@@ -72,6 +72,7 @@ public class BaseController {
 			//新增
 			inviteInfoService.insert(inviteInfo);
 		}
+		System.out.println("订单信息，订单ID："+inviteInfo.getId());
 		return inviteInfo;
 	}
 	
