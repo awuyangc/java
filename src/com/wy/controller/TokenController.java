@@ -108,7 +108,7 @@ public class TokenController {
 		{
 			if(inviteId!=""&&inviteId!=null&&!inviteId.equals("null"))
 			{
-				return "redirect:/signUp.action?inviteId="+inviteId;
+				return "redirect:/index.action?page=signUp&inviteId="+inviteId;
 			}
 			else
 			{
@@ -148,7 +148,7 @@ public class TokenController {
 		}
 		if(inviteId!=""&&inviteId!=null&&!inviteId.equals("null"))
 		{
-			return "redirect:/signUp.action?inviteId="+inviteId;
+			return "redirect:/index.action?page=signUp&inviteId="+inviteId;
 		}
 		else
 		{

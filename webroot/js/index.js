@@ -1,68 +1,12 @@
  $.afui.autoLaunch=false;
  $.afui.useOSThemes=false;
+ //判断是否需要跳转到指定页面
+ changePage();
+ 
 
  /* This function runs when the content is loaded.*/
  $(document).ready(function(){
-	//获取js开发许可
-	 	$.ajax({
-	        url: "weixin/sign.action",
-	        data:{url:location.href.split('#')[0]},
-	        success: function (data) {
-	        	wx.config({
-	        	    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-	        	    appId: 'wx6d373275087fc071', // 必填，公众号的唯一标识
-	        	    timestamp: data.timestamp, // 必填，生成签名的时间戳
-	        	    nonceStr: data.nonceStr, // 必填，生成签名的随机串
-	        	    signature: data.signature,// 必填，签名，见附录1
-	        	    jsApiList: [
-							'checkJsApi',
-							'onMenuShareTimeline',
-							'onMenuShareAppMessage',
-							'onMenuShareQQ',
-							'onMenuShareWeibo',
-							'hideMenuItems',
-							'showMenuItems',
-							'hideAllNonBaseMenuItem',
-							'showAllNonBaseMenuItem',
-							'translateVoice',
-							'startRecord',
-							'stopRecord',
-							'onRecordEnd',
-							'playVoice',
-							'pauseVoice',
-							'stopVoice',
-							'uploadVoice',
-							'downloadVoice',
-							'chooseImage',
-							'previewImage',
-							'uploadImage',
-							'downloadImage',
-							'getNetworkType',
-							'openLocation',
-							'getLocation',
-							'hideOptionMenu',
-							'showOptionMenu',
-							'closeWindow',
-							'scanQRCode',
-							'chooseWXPay',
-							'openProductSpecificView',
-							'addCard',
-							'chooseCard',
-							'openCard'
-	        	      ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-	        	});
-	        }
-	    });  
-		
-		 // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-		wx.ready(function(){
-			//wx.hideOptionMenu();
-		});
-
-		wx.error(function(res){
-			// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-			});
-		
+	
 		 //显示加载动画
 		 setTimeout(function(){$.afui.launch();},1500);
 		 if($.afui.useOSThemes&&!$.os.ios&&$("#afui").get(0).className!=="ios")
@@ -83,7 +27,6 @@
  
 function initInvite()
 {
-	 //$.afui.loadDiv("#inviteInfoList",false,false,"up")
 	//wx.hideOptionMenu();
 	$("#invite-day").mobiscroll().date({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
 	$("#invite-begin").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
@@ -108,7 +51,67 @@ function initInvite()
  
 function initRestaurant()
 {
-	wx.hideOptionMenu();
+	//获取js开发许可
+	$.ajax({
+     url: "weixin/sign.action",
+     data:{url:location.href.split('#')[0]},
+     success: function (data) {
+     	wx.config({
+     	    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+     	    appId: 'wx6d373275087fc071', // 必填，公众号的唯一标识
+     	    timestamp: data.timestamp, // 必填，生成签名的时间戳
+     	    nonceStr: data.nonceStr, // 必填，生成签名的随机串
+     	    signature: data.signature,// 必填，签名，见附录1
+     	    jsApiList: [
+						'checkJsApi',
+						'onMenuShareTimeline',
+						'onMenuShareAppMessage',
+						'onMenuShareQQ',
+						'onMenuShareWeibo',
+						'hideMenuItems',
+						'showMenuItems',
+						'hideAllNonBaseMenuItem',
+						'showAllNonBaseMenuItem',
+						'translateVoice',
+						'startRecord',
+						'stopRecord',
+						'onRecordEnd',
+						'playVoice',
+						'pauseVoice',
+						'stopVoice',
+						'uploadVoice',
+						'downloadVoice',
+						'chooseImage',
+						'previewImage',
+						'uploadImage',
+						'downloadImage',
+						'getNetworkType',
+						'openLocation',
+						'getLocation',
+						'hideOptionMenu',
+						'showOptionMenu',
+						'closeWindow',
+						'scanQRCode',
+						'chooseWXPay',
+						'openProductSpecificView',
+						'addCard',
+						'chooseCard',
+						'openCard'
+     	      ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+     	});
+     }
+ });  
+	
+	 // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+	wx.ready(function(){
+		wx.hideOptionMenu();
+	});
+
+	wx.error(function(res){
+		// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+		});
+  
+	
 	$.ajax({
 	   	dataType : "jsonp",
 	       url: "http://yuntuapi.amap.com/datasearch/local?tableid=55656259e4b0ccb608f13383&city=全国&keywords= &limit=50&page=1&key=a46ffb73729bb688480643eea31387e7",
@@ -224,6 +227,7 @@ function initConfirmInvite()
 	$("#btnConfirmInvite").unbind().click(function(){
 		
 		$.ajax({
+			async: false,
 	        url: "saveInviteInfo.action",
 	        data:{
 	        	  "id":inviteId,
@@ -244,8 +248,10 @@ function initConfirmInvite()
 
 function shareInvite()
 {
+	wx.showOptionMenu();
 	var inviteId=$("#inviteId").val();
 	var nickname=$("#nickname").val();
+	alert(inviteId);
 	//分享给朋友
 	wx.onMenuShareAppMessage({
 	    title: '一伙锅', // 分享标题
@@ -268,7 +274,7 @@ function shareInvite()
 	wx.onMenuShareTimeline({
 	    title: '一伙锅', // 分享标题
 	    desc: '您的好友'+nickname+'邀请您参加一伙锅吧！', // 分享描述
-	    link: 'http://awuyangc.xicp.net/origin/#signUp?inviteId='+inviteId, // 分享链接
+	    link: 'http://awuyangc.xicp.net/origin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
 	    imgUrl: 'http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg', // 分享图标
 	    success: function () { 
 	        // 用户确认分享后执行的回调函数
@@ -286,7 +292,25 @@ function initSignUp()
         url: "getInviteInfo.action",
         data:{"inviteId":inviteId},
         success: function (data) {
-        	$("#inviteSignInfo").html("您的好友XXX邀请您 "+data.inviteDay+" 一伙锅");
+        	$("#inviteSignInfo").html("您的好友 <font color='red'>"+data.weixinUser.nickname+"</font> 邀请您 <font color='blue'>"+data.inviteDay+"</font> 一伙锅");
+        	$.ajax({
+        	   	dataType : "jsonp",
+        	       url: "http://yuntuapi.amap.com/datasearch/id?tableid=55656259e4b0ccb608f13383&_id="+data.inviteAddress+"&key=a46ffb73729bb688480643eea31387e7",
+        	       success: function (result) {
+        	       	 var listRestaurant=""; 
+        	       	 $(result.datas).each(function(i,val){
+        	       		listRestaurant +='<li id="li'+val._id+'">'+
+        					 			 //'<a href="#restaurantDetail" onclick="$(\'#restaurantId\').val('+val._id+');$(\'#restaurantName\').val(\''+val._name+'\')">'+
+        								 '<img src="'+val._image[0]._url+'">'+
+        								 '<h2>'+val._name+'</h2>'+
+        								 '<p>'+val._address+'</p>'+
+        								 '</a>'+
+        								 '</li>';
+        	          	  })  
+        	          	 $("#restaurantInfo").html(listRestaurant);
+        	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
+        		       }
+        		     });
         }
     });  
 }
@@ -333,3 +357,8 @@ function dispatchPanelEvent(fnc,myPanel){
 	   var r = window.location.search.substr(1).match(reg);
 	   if (r!=null) return (r[2]); return null;
 	}
+ 
+ function changePage(){
+	 var page=GetQueryString("page");
+	 window.location.href="#"+page;
+ }

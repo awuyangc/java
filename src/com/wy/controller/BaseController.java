@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wy.model.InviteInfo;
+import com.wy.model.WeixinUser;
 import com.wy.service.IInviteInfoService;
+import com.wy.service.IUserService;
+import com.wy.service.IWeixinUserService;
 
 @Controller
 @RequestMapping("/")
@@ -22,10 +25,12 @@ public class BaseController {
 //*********************************************首页***********************************************
 	@Resource
 	private IInviteInfoService inviteInfoService;
+	@Resource
+	private IWeixinUserService weixinUserService;
 	
 	@RequestMapping("/index")
-	public String toIndex(){
-		return "index.html?rd="+Math.random();
+	public String toIndex(String page,String inviteId){
+		return "index.html?page="+page+"inviteId="+inviteId+"&rd="+Math.random();
 	}
 	
 	
@@ -38,7 +43,8 @@ public class BaseController {
 	@RequestMapping("/getInviteInfo")
 	@ResponseBody
 	public InviteInfo getInviteInfo(Integer inviteId){
-		return inviteInfoService.getInviteInfoById(inviteId);
+		InviteInfo inviteInfo=inviteInfoService.getInviteInfoById(inviteId);
+		return inviteInfo;
 	}
 	
 	@RequestMapping("/saveInviteInfo")

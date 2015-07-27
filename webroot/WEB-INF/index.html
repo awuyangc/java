@@ -41,7 +41,7 @@
 <script type="text/javascript" src="js/index.js"></script>
 
 <style>
-        #listRestaurant li a img 
+        .list li img 
         {
         	width: 80px; height: 80px; float: left;
         }
@@ -62,7 +62,9 @@
  
     <div class="view" id="mainview">
       
- 
+ 		<header>
+            <h1>Tab View</h1>
+        </header>
         <div class="pages">
  
          <!--Tab View Pages-->
@@ -82,7 +84,7 @@
 	         </div>      
         </div>
  
-        <div class="panel" id="invite" data-load='initInvite' data-header="inviteHeader">
+        <div class="panel" data-title="选择时间" id="invite" data-load='initInvite'>
 	         <div>
 				 <p style="text-align:center">
 				 	请确定一伙锅的时间！
@@ -136,7 +138,13 @@
         <div class="panel"  data-title="邀约信息" id="inviteInfoList" data-load='initInviteInfo'>    
 			
         </div>
-        
+        <div class="panel"  data-title="报名页" id="signUp" data-load='initSignUp'>    
+				 <h2 id="inviteSignInfo" style="margin-bottom:10px"></h2>
+				 <ul class="list" id="restaurantInfo"></ul>
+	             <h2>已报名的用户：</h2>
+	             <div id="signUserList"></div>
+	              <a href="#" id="btnSignUp" class="button">我要报名</a>
+        </div>
         
        </div>
  
