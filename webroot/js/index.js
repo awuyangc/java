@@ -312,7 +312,101 @@ function initSignUp()
         		       }
         		     });
         }
-    });  
+    }); 
+	//初始化报名单
+	$.ajax({
+        url: "getJoinInfo.action",
+        data:{"inviteId":inviteId},
+        success: function (data) {
+        	var signUserList="";
+        	$(data).each(function(i,val){
+        		signUserList +="<font color='#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6)+"'>"+val.weixinUser.nickname+"</font>"
+        	});
+        	$("#signUserList").html(signUserList);
+        }
+    }); 
+	//我要报名按钮
+	$("#btnSignUp").unbind().click(function (){
+		$.ajax({
+	        url: "saveJoinInfo.action",
+	        data:{"inviteId":inviteId},
+	        success: function (data) {
+	        	alert(data);
+	        	if(data=="ok")
+	        	{
+	        		$.afui.toast({
+    				    message:"报名成功",
+    				    position:"tc",
+    				    delay:1500,
+    				    autoClose:true, //have to click the message to close
+    				    type:"error"
+    				});
+	        		$.ajax({
+	        	        url: "getJoinInfo.action",
+	        	        data:{"inviteId":inviteId},
+	        	        success: function (data) {
+	        	        	var signUserList="";
+	        	        	$(data).each(function(i,val){
+	        	        		signUserList +="<font color='#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6)+"'>"+val.weixinUser.nickname+"</font>"
+	        	        	});
+	        	        	$("#signUserList").html(signUserList);
+	        	        }
+	        	    }); 
+	        	}
+	        	else
+        		{
+	        		$.afui.toast({
+    				    message:"报名失败",
+    				    position:"tc",
+    				    delay:1500,
+    				    autoClose:true, //have to click the message to close
+    				    type:"error"
+    				});
+        		}
+	        }
+	    });  
+	});
+	//取消报名按钮
+	$("#btnSignOut").unbind().click(function (){
+		$.ajax({
+	        url: "deleteJoinInfo.action",
+	        data:{"inviteId":inviteId},
+	        success: function (data) {
+	        	if(data=="ok")
+	        	{
+	        		$.afui.toast({
+    				    message:"取消报名成功",
+    				    position:"tc",
+    				    delay:1500,
+    				    autoClose:true, //have to click the message to close
+    				    type:"error"
+    				});
+	        		var signUserList="";
+	        		$.ajax({
+	        	        url: "getJoinInfo.action",
+	        	        data:{"inviteId":inviteId},
+	        	        success: function (data) {
+	        	        	$(data).each(function(i,val){
+	        	        		signUserList +="<font color='#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6)+"'>"+val.weixinUser.nickname+"</font>"
+	        	        	});
+	        	        	
+	        	        	$("#signUserList").html(signUserList);
+	        	        }
+	        	    }); 
+	        	}
+	        	else
+        		{
+	        		$.afui.toast({
+    				    message:"取消报名失败",
+    				    position:"tc",
+    				    delay:1500,
+    				    autoClose:true, //have to click the message to close
+    				    type:"error"
+    				});
+        		}
+	        }
+	    });  
+	});
 }
 
 function initInviteInfo()

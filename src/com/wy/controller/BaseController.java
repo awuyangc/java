@@ -7,15 +7,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qq.weixin.message.model.SNSUserInfo;
 import com.wy.model.InviteInfo;
+import com.wy.model.JoinInfo;
 import com.wy.model.WeixinUser;
 import com.wy.service.IInviteInfoService;
+import com.wy.service.IJoinInfoService;
 import com.wy.service.IUserService;
 import com.wy.service.IWeixinUserService;
 
@@ -27,6 +31,8 @@ public class BaseController {
 	private IInviteInfoService inviteInfoService;
 	@Resource
 	private IWeixinUserService weixinUserService;
+	@Resource
+	private IJoinInfoService joinInfoService;
 	
 	@RequestMapping("/index")
 	public String toIndex(String page,String inviteId){
@@ -75,6 +81,48 @@ public class BaseController {
 			inviteInfoService.insert(inviteInfo);
 		}
 		return inviteInfo;
+	}
+	
+	
+	@RequestMapping("/saveJoinInfo")
+	@ResponseBody
+	public String saveJoinInfo(int inviteId,HttpSession session) throws ParseException{
+		//inviteInfoService.insert(inviteInfo);
+		JoinInfo joinInfo=new JoinInfo();
+		joinInfo.setInviteId(inviteId);
+		SNSUserInfo snsUserInfo=(SNSUserInfo) session.getAttribute("snsUserInfo");
+		joinInfo.setOpenId(snsUserInfo.getOpenId());
+		joinInfo.setCreateTime(new Date());
+		if(joinInfoService.getMySignInfo(joinInfo)==null)
+		{
+		joinInfoService.insert(joinInfo);
+		}
+		return "ok1";
+	}
+	
+	@RequestMapping("/deleteJoinInfo")
+	@ResponseBody
+	public String deleteJoinInfo(int inviteId,HttpSession session) throws ParseException{
+		JoinInfo joinInfo=new JoinInfo();
+		joinInfo.setInviteId(inviteId);
+		SNSUserInfo snsUserInfo=(SNSUserInfo) session.getAttribute("snsUserInfo");
+		if(snsUserInfo!=null)
+		{
+		joinInfo.setOpenId(snsUserInfo.getOpenId());
+		joinInfoService.deleteByInviteId(joinInfo);
+		return "ok1";
+		}
+		else
+		{
+			return "error";
+		}
+	}
+	
+	@RequestMapping("/getJoinInfo")
+	@ResponseBody
+	public JoinInfo getJoinInfo(Integer inviteId){
+		JoinInfo joinInfo=joinInfoService.getJoinInfoByInviteId(inviteId);
+		return joinInfo;
 	}
 	
 }

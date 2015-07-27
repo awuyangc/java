@@ -1,8 +1,11 @@
 package com.wy.service.impl;
 
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
 import com.wy.dao.JoinInfoMapper;
 import com.wy.model.JoinInfo;
 import com.wy.service.IJoinInfoService;
@@ -41,6 +44,24 @@ public class JoinInfoServiceImpl implements IJoinInfoService {
 	public void delete(Integer id) {
 		// TODO Auto-generated method stub
 		joinInfoMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public JoinInfo getJoinInfoByInviteId(Integer inviteId) {
+		// TODO Auto-generated method stub
+		return joinInfoMapper.selectByInviteId(inviteId);
+	}
+
+	@Override
+	public void deleteByInviteId(JoinInfo joinInfo) {
+		// TODO Auto-generated method stub
+		joinInfoMapper.deleteByInviteId(joinInfo);
+	}
+
+	@Override
+	public JoinInfo getMySignInfo(JoinInfo joinInfo) {
+		// TODO Auto-generated method stub
+		return joinInfoMapper.selectMySignInfo(joinInfo);
 	}
 
 }
