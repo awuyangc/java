@@ -63,6 +63,7 @@ public class InviteInfo {
      *
      * @mbggenerated Mon Jun 29 11:27:27 CST 2015
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone = "GMT+8")
     private Date createTime;
 
     /**

@@ -47,7 +47,7 @@ public class JoinInfoServiceImpl implements IJoinInfoService {
 	}
 
 	@Override
-	public JoinInfo getJoinInfoByInviteId(Integer inviteId) {
+	public List<JoinInfo> getJoinInfoByInviteId(Integer inviteId) {
 		// TODO Auto-generated method stub
 		return joinInfoMapper.selectByInviteId(inviteId);
 	}
@@ -59,9 +59,15 @@ public class JoinInfoServiceImpl implements IJoinInfoService {
 	}
 
 	@Override
-	public JoinInfo getMySignInfo(JoinInfo joinInfo) {
+	public JoinInfo checkMySignInfo(JoinInfo joinInfo) {
 		// TODO Auto-generated method stub
-		return joinInfoMapper.selectMySignInfo(joinInfo);
+		return joinInfoMapper.checkMySignInfo(joinInfo);
+	}
+
+	@Override
+	public List<JoinInfo> selectMySignInfo(String openId) {
+		// TODO Auto-generated method stub
+		return joinInfoMapper.selectMySignInfo(openId);
 	}
 
 }

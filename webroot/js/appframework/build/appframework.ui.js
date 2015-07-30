@@ -405,7 +405,7 @@ window.af=window.jq=jQuery;
                     $el.addClass("win8");
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $el.addClass("bb");
-                    that.backButtonText = "Back";
+                    that.backButtonText = "返回";
                 } else if ($.os.ios7){
                     $el.addClass("ios7");
                 } else if ($.os.ios)
@@ -1142,7 +1142,7 @@ window.af=window.jq=jQuery;
             if(items>=2&&isNewView!==true){
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
-                hdr.prepend("<a class='backButton back'>Back</a>");
+                hdr.prepend("<a class='backButton back'>返回</a>");
             }
             else {
                 hdr.find(".backButton").remove();

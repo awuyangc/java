@@ -5,6 +5,7 @@ package com.wy.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qq.weixin.message.model.SNSUserInfo;
+import com.qq.weixin.utils.AdvancedUtil;
 import com.wy.model.InviteInfo;
 import com.wy.model.JoinInfo;
 import com.wy.model.WeixinUser;
@@ -36,7 +38,7 @@ public class BaseController {
 	
 	@RequestMapping("/index")
 	public String toIndex(String page,String inviteId){
-		return "index.html?page="+page+"inviteId="+inviteId+"&rd="+Math.random();
+		return "index.html?page="+page+"&inviteId="+inviteId+"&rd="+Math.random();
 	}
 	
 	
@@ -45,6 +47,19 @@ public class BaseController {
 		return "signUp.html?inviteId="+inviteId+"&rd="+Math.random();
 	}
 	
+	@RequestMapping("/setVirtualSession")
+	@ResponseBody
+	public String  setVirtualSession(HttpSession session,SNSUserInfo snsUserInfo){
+		snsUserInfo.setOpenId("ohgNjs8zYxx4utgRDuhydQvmKLAM");
+		snsUserInfo.setNickname("五小羊");
+		//snsUserInfo.setOpenId("ohgNjswHcgpLpEl6T1fe307027Vw");
+		//snsUserInfo.setNickname("Leaves");
+		//snsUserInfo.setOpenId("ohgNjsxgGyDQitK2cezkBXOf4pXQ");
+		//snsUserInfo.setNickname("马于涛");			
+		//设置session
+		session.setAttribute("snsUserInfo", snsUserInfo);
+		return "ok";
+	}
 	
 	@RequestMapping("/getInviteInfo")
 	@ResponseBody
@@ -91,13 +106,20 @@ public class BaseController {
 		JoinInfo joinInfo=new JoinInfo();
 		joinInfo.setInviteId(inviteId);
 		SNSUserInfo snsUserInfo=(SNSUserInfo) session.getAttribute("snsUserInfo");
-		joinInfo.setOpenId(snsUserInfo.getOpenId());
-		joinInfo.setCreateTime(new Date());
-		if(joinInfoService.getMySignInfo(joinInfo)==null)
+		if(snsUserInfo!=null)
 		{
-		joinInfoService.insert(joinInfo);
+			joinInfo.setOpenId(snsUserInfo.getOpenId());
+			joinInfo.setCreateTime(new Date());
+			if(joinInfoService.checkMySignInfo(joinInfo)==null)
+			{
+			joinInfoService.insert(joinInfo);
+			}
+			return "ok";
 		}
-		return "ok1";
+		else
+		{
+			return "error";
+		}
 	}
 	
 	@RequestMapping("/deleteJoinInfo")
@@ -110,7 +132,7 @@ public class BaseController {
 		{
 		joinInfo.setOpenId(snsUserInfo.getOpenId());
 		joinInfoService.deleteByInviteId(joinInfo);
-		return "ok1";
+		return "ok";
 		}
 		else
 		{
@@ -120,9 +142,23 @@ public class BaseController {
 	
 	@RequestMapping("/getJoinInfo")
 	@ResponseBody
-	public JoinInfo getJoinInfo(Integer inviteId){
-		JoinInfo joinInfo=joinInfoService.getJoinInfoByInviteId(inviteId);
-		return joinInfo;
+	public List<JoinInfo> getJoinInfo(Integer inviteId){
+		List<JoinInfo> joinInfoList=joinInfoService.getJoinInfoByInviteId(inviteId);
+		return joinInfoList;
 	}
 	
+	@RequestMapping("/getRInviteInfo")
+	@ResponseBody
+	public List<JoinInfo> getRInviteInfo(HttpSession session){
+		SNSUserInfo snsUserInfo=(SNSUserInfo) session.getAttribute("snsUserInfo");
+		if(snsUserInfo!=null)
+		{
+		List<JoinInfo> joinInfoList=joinInfoService.selectMySignInfo(snsUserInfo.getOpenId());
+		return joinInfoList;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

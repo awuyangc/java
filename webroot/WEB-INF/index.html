@@ -41,7 +41,11 @@
 <script type="text/javascript" src="js/index.js"></script>
 
 <style>
-        .list li img 
+        #restaurantInfo li img 
+        {
+        	width: 80px; height: 80px; float: left;
+        }
+        #listRestaurant li img 
         {
         	width: 80px; height: 80px; float: left;
         }
@@ -72,18 +76,29 @@
              <div style="margin-top:20px">欢迎您！<font color="red" id="userNickName"></font></div>  
              <div>
 	           	<div style="float:left;width:50%;"><a class="button icon phone" href="#invite">立即邀约朋友</a></div>
-	           	<div style="float:right;width:50%;"><a class="button icon info" href="#inviteInfoList">查看邀约信息</a></div>
+	           	<div style="float:right;width:50%;"><a class="button icon info" href="#rInviteInfo">我报名的邀请</a></div>
 	         </div> 
+	         <div>
+	         	<div style="float:right;width:50%;"><a class="button icon info" href="#sInviteInfo">我发出的邀请</a></div>
+	         </div>
 	         <div>
 	           	<div style="float:left;width:50%"><a class="button icon heart" href="#invite">设置我的偏好</a></div>
 	           	<div style="float:right;width:50%"><a class="button icon mail" href="#invite">我的订单</a></div>
 	         </div> 
 	         <div>
 	           	<div style="float:left;width:50%"><a class="button icon user" href="#invite">我的账号</a></div>
-	           	<div style="float:right;width:50%"><a class="button icon tools" href="#invite">其他</a></div>
+	           	<div style="float:right;width:50%"><a class="button icon tools" href="#" onclick="login()">模拟微信登陆(网页调试使用)</a></div>
 	         </div>      
         </div>
- 
+ 		
+ 		<div class="panel" data-title="我报名的邀请" id="rInviteInfo" data-load='initRInviteInfoList'>
+ 			<ul class="list" id="rInviteInfoList"></ul>
+ 		</div>
+ 		
+ 		<div class="panel" data-title="我发出的邀请" id="sInviteInfo" data-load='initSInviteInfoList'>
+ 		
+ 		</div>
+ 		
         <div class="panel" data-title="选择时间" id="invite" data-load='initInvite'>
 	         <div>
 				 <p style="text-align:center">
@@ -135,13 +150,10 @@
 			<div id="shareInfo" style="font-family:'黑体';font-size:20px;margin-top:100px">邀请信息已提交，请点击右上角按钮来邀请朋友吧！</div>
         </div>
         
-        <div class="panel"  data-title="邀约信息" id="inviteInfoList" data-load='initInviteInfo'>    
-			
-        </div>
-        <div class="panel"  data-title="报名页" id="signUp" data-load='initSignUp'>    
-				 <h2 id="inviteSignInfo" style="margin-bottom:10px"></h2>
-				 <ul class="list" id="restaurantInfo"></ul>
-	             <h2>已报名的用户：</h2>
+        <div class="panel"  data-title="报名页" id="signUp" data-load='initSignUp' data-unload='unloadSignUp'>    
+				 <div style="margin-bottom:30px"><h2 id="inviteSignInfo"></h2></div>
+				 <div><ul id="restaurantInfo"></ul></div>
+	             <div><h2>已报名的用户：</h2></div>
 	             <div id="signUserList"></div>
 	              <a href="#" id="btnSignUp" class="button">我要报名</a>
 	              <a href="#" id="btnSignOut" class="button">取消报名</a>

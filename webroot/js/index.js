@@ -1,18 +1,87 @@
  $.afui.autoLaunch=false;
  $.afui.useOSThemes=false;
  //判断是否需要跳转到指定页面
+ $.afui.ready(function(){
+		//$.afui.setBackButtonText("返回");
+		//$.afui.setBackButtonVisibility(false)
+ });
+ 
+ //判断需要跳转到哪个页面
  changePage();
  
-
  /* This function runs when the content is loaded.*/
  $(document).ready(function(){
-	
-		 //显示加载动画
+	 //全局设置转场动画
+	 $("a").attr("data-transition","fade");
+	//获取js开发许可
+		$.ajax({
+		 async:false,
+		  url: "weixin/sign.action",
+		  data:{url:location.href.split('#')[0]},
+		  success: function (data) {
+		  	wx.config({
+		  	    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		  	    appId: 'wx6d373275087fc071', // 必填，公众号的唯一标识
+		  	    timestamp: data.timestamp, // 必填，生成签名的时间戳
+		  	    nonceStr: data.nonceStr, // 必填，生成签名的随机串
+		  	    signature: data.signature,// 必填，签名，见附录1
+		  	    jsApiList: [
+								'checkJsApi',
+								'onMenuShareTimeline',
+								'onMenuShareAppMessage',
+								'onMenuShareQQ',
+								'onMenuShareWeibo',
+								'hideMenuItems',
+								'showMenuItems',
+								'hideAllNonBaseMenuItem',
+								'showAllNonBaseMenuItem',
+								'translateVoice',
+								'startRecord',
+								'stopRecord',
+								'onRecordEnd',
+								'playVoice',
+								'pauseVoice',
+								'stopVoice',
+								'uploadVoice',
+								'downloadVoice',
+								'chooseImage',
+								'previewImage',
+								'uploadImage',
+								'downloadImage',
+								'getNetworkType',
+								'openLocation',
+								'getLocation',
+								'hideOptionMenu',
+								'showOptionMenu',
+								'closeWindow',
+								'scanQRCode',
+								'chooseWXPay',
+								'openProductSpecificView',
+								'addCard',
+								'chooseCard',
+								'openCard'
+		  	      ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+		  	});
+		  }
+		});  
+		
+		 // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+		wx.ready(function(){
+			wx.hideOptionMenu();
+		});
+
+		wx.error(function(res){
+			alert("微信js签名错误");
+			// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+			});
+		
+		//显示加载动画
 		 setTimeout(function(){$.afui.launch();},1500);
 		 if($.afui.useOSThemes&&!$.os.ios&&$("#afui").get(0).className!=="ios")
 	     {
 		 	$("#afui").removeClass("ios");
 	     }
+		 
 		$.ajax({
 	         url: "weixin/getSession.action",
 	         success: function (data) {
@@ -22,9 +91,9 @@
 	        	 $("#nickname").val(data.nickname);
 	         }
 	     });  
-
 });
  
+ //填写邀请信息
 function initInvite()
 {
 	//wx.hideOptionMenu();
@@ -49,69 +118,9 @@ function initInvite()
 	});
 }
  
+//选择餐厅
 function initRestaurant()
 {
-	//获取js开发许可
-	$.ajax({
-     url: "weixin/sign.action",
-     data:{url:location.href.split('#')[0]},
-     success: function (data) {
-     	wx.config({
-     	    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-     	    appId: 'wx6d373275087fc071', // 必填，公众号的唯一标识
-     	    timestamp: data.timestamp, // 必填，生成签名的时间戳
-     	    nonceStr: data.nonceStr, // 必填，生成签名的随机串
-     	    signature: data.signature,// 必填，签名，见附录1
-     	    jsApiList: [
-						'checkJsApi',
-						'onMenuShareTimeline',
-						'onMenuShareAppMessage',
-						'onMenuShareQQ',
-						'onMenuShareWeibo',
-						'hideMenuItems',
-						'showMenuItems',
-						'hideAllNonBaseMenuItem',
-						'showAllNonBaseMenuItem',
-						'translateVoice',
-						'startRecord',
-						'stopRecord',
-						'onRecordEnd',
-						'playVoice',
-						'pauseVoice',
-						'stopVoice',
-						'uploadVoice',
-						'downloadVoice',
-						'chooseImage',
-						'previewImage',
-						'uploadImage',
-						'downloadImage',
-						'getNetworkType',
-						'openLocation',
-						'getLocation',
-						'hideOptionMenu',
-						'showOptionMenu',
-						'closeWindow',
-						'scanQRCode',
-						'chooseWXPay',
-						'openProductSpecificView',
-						'addCard',
-						'chooseCard',
-						'openCard'
-     	      ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-     	});
-     }
- });  
-	
-	 // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-	wx.ready(function(){
-		wx.hideOptionMenu();
-	});
-
-	wx.error(function(res){
-		// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-		});
-  
-	
 	$.ajax({
 	   	dataType : "jsonp",
 	       url: "http://yuntuapi.amap.com/datasearch/local?tableid=55656259e4b0ccb608f13383&city=全国&keywords= &limit=50&page=1&key=a46ffb73729bb688480643eea31387e7",
@@ -119,7 +128,7 @@ function initRestaurant()
 	       	 var listRestaurant=""; 
 	       	 $(result.datas).each(function(i,val){
 	       		listRestaurant +='<li id="li'+val._id+'">'+
-					 			 '<a href="#restaurantDetail" onclick="$(\'#restaurantId\').val('+val._id+');$(\'#restaurantName\').val(\''+val._name+'\')">'+
+					 			 '<a href="#restaurantDetail" data-transition="fade" onclick="$(\'#restaurantId\').val('+val._id+');$(\'#restaurantName\').val(\''+val._name+'\')">'+
 								 '<img src="'+val._image[0]._url+'">'+
 								 '<h2>'+val._name+'</h2>'+
 								 '<p>'+val._address+'</p>'+
@@ -133,6 +142,7 @@ function initRestaurant()
 
 }
  
+//查看餐厅明细地址
 function initRrestaurantDetail()
 {
 	//隐藏右上角按钮
@@ -206,12 +216,13 @@ function initRrestaurantDetail()
 
 }
 
+//离开餐厅明细时清空页面dom。防止下次加载时显示上次的信息。
 function unloadRrestaurantDetail()
 {
 	$("#mapContainer").empty();
 }
 
-
+//用户确认邀请信息
 function initConfirmInvite()
 {
 	wx.hideOptionMenu();
@@ -246,12 +257,12 @@ function initConfirmInvite()
 	});
 }
 
+//分享邀请单
 function shareInvite()
 {
 	wx.showOptionMenu();
 	var inviteId=$("#inviteId").val();
 	var nickname=$("#nickname").val();
-	alert(inviteId);
 	//分享给朋友
 	wx.onMenuShareAppMessage({
 	    title: '一伙锅', // 分享标题
@@ -287,7 +298,16 @@ function shareInvite()
 
 function initSignUp()
 {
-	var inviteId=GetQueryString("inviteId");
+	
+	var inviteId=sessionStorage.getItem("inviteId");
+	if(inviteId!=null&&inviteId!="")
+	{
+		sessionStorage.setItem("inviteId",inviteId);
+	}
+	else
+	{
+		inviteId=GetQueryString("inviteId");
+	}
 	$.ajax({
         url: "getInviteInfo.action",
         data:{"inviteId":inviteId},
@@ -315,12 +335,13 @@ function initSignUp()
     }); 
 	//初始化报名单
 	$.ajax({
-        url: "getJoinInfo.action",
+        url: "getJoinInfo.action?rd="+Math.random(),
         data:{"inviteId":inviteId},
         success: function (data) {
         	var signUserList="";
         	$(data).each(function(i,val){
-        		signUserList +="<font color='#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6)+"'>"+val.weixinUser.nickname+"</font>"
+        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
+        		signUserList +="&nbsp;&nbsp;<font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
         	});
         	$("#signUserList").html(signUserList);
         }
@@ -328,10 +349,9 @@ function initSignUp()
 	//我要报名按钮
 	$("#btnSignUp").unbind().click(function (){
 		$.ajax({
-	        url: "saveJoinInfo.action",
+	        url: "saveJoinInfo.action?rd="+Math.random(),
 	        data:{"inviteId":inviteId},
 	        success: function (data) {
-	        	alert(data);
 	        	if(data=="ok")
 	        	{
 	        		$.afui.toast({
@@ -347,7 +367,8 @@ function initSignUp()
 	        	        success: function (data) {
 	        	        	var signUserList="";
 	        	        	$(data).each(function(i,val){
-	        	        		signUserList +="<font color='#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6)+"'>"+val.weixinUser.nickname+"</font>"
+	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
+	        	        		signUserList +="&nbsp;&nbsp;<font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
 	        	        	});
 	        	        	$("#signUserList").html(signUserList);
 	        	        }
@@ -369,7 +390,7 @@ function initSignUp()
 	//取消报名按钮
 	$("#btnSignOut").unbind().click(function (){
 		$.ajax({
-	        url: "deleteJoinInfo.action",
+	        url: "deleteJoinInfo.action?rd="+Math.random(),
 	        data:{"inviteId":inviteId},
 	        success: function (data) {
 	        	if(data=="ok")
@@ -383,11 +404,12 @@ function initSignUp()
     				});
 	        		var signUserList="";
 	        		$.ajax({
-	        	        url: "getJoinInfo.action",
+	        	        url: "getJoinInfo.action?rd="+Math.random(),
 	        	        data:{"inviteId":inviteId},
 	        	        success: function (data) {
 	        	        	$(data).each(function(i,val){
-	        	        		signUserList +="<font color='#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6)+"'>"+val.weixinUser.nickname+"</font>"
+	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
+	        	        		signUserList +="&nbsp;&nbsp;<font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
 	        	        	});
 	        	        	
 	        	        	$("#signUserList").html(signUserList);
@@ -409,11 +431,35 @@ function initSignUp()
 	});
 }
 
-function initInviteInfo()
+//离开报名页时清空页面dom。防止下次加载时显示上次的信息。
+function unloadSignUp()
+{
+	sessionStorage.setItem("inviteId",null);
+	$("#signUserList").empty();
+	
+}
+
+//我报名的邀请
+function initRInviteInfoList()
 {
 	wx.hideOptionMenu();
-	//获取所有的我的邀请单
-	
+	var rInviteInfoList="";
+	$.ajax({
+        url: "getRInviteInfo.action?rd="+Math.random(),
+        success: function (data) {
+        	$(data).each(function(i,val){
+        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage("+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>"
+        	});
+        	
+        	$("#rInviteInfoList").html(rInviteInfoList);
+        }
+    });
+}
+
+//我发出的邀请
+function initSInviteInfoList()
+{
+	wx.hideOptionMenu();
 }
 
 function dispatchPanelEvent(fnc,myPanel){
@@ -455,4 +501,19 @@ function dispatchPanelEvent(fnc,myPanel){
  function changePage(){
 	 var page=GetQueryString("page");
 	 window.location.href="#"+page;
+ }
+ 
+ function setSessionStorage(inviteId)
+ {
+	 sessionStorage.setItem("inviteId",inviteId); 
+ }
+ 
+ function login()
+ {
+	 $.ajax({
+	        url: "setVirtualSession.action",
+	        success: function (data) {
+	        	 location.reload();
+	        }
+	    });
  }
