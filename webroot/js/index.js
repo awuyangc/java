@@ -108,7 +108,7 @@ function initInvite()
 			{
 				$.afui.toast({
 				    message:"请将信息填写完整",
-				    position:"tc",
+				    position:"bc",
 				    delay:1500,
 				    autoClose:true, //have to click the message to close
 				    type:"error"
@@ -250,7 +250,6 @@ function initConfirmInvite()
 	        		},
 	        success: function (data) {
 	        	$("#inviteId").val(data.id);
-	        	$("#btnDiv").hide();
 	        	$("#shareInfo").show();
 	        }
 	    });  
@@ -514,6 +513,7 @@ function dispatchPanelEvent(fnc,myPanel){
 	        url: "setVirtualSession.action",
 	        success: function (data) {
 	        	 location.reload();
+	        	//$.afui.loadContent("#rInviteInfo",false,false,"up");
 	        }
 	    });
  }
