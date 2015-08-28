@@ -43,7 +43,6 @@
 <script src="js/mobiscroll/js/mobiscroll.core.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.frame.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.scroller.js"></script>
-
 <script src="js/mobiscroll/js/mobiscroll.util.datetime.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.datetimebase.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.datetime.js"></script>
@@ -51,6 +50,7 @@
 <script src="js/mobiscroll/js/mobiscroll.frame.android-holo.js"></script>
 <script src="js/mobiscroll/js/i18n/mobiscroll.i18n.zh.js"></script>
 
+<script src="js/iscroll5/iscroll.js"></script>
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/index.js"></script>
 
@@ -66,6 +66,57 @@
 	height: 80px;
 	float: left;
 }
+
+#wrapper {
+			position: absolute;
+			z-index: 1;
+			top: 45px;
+			bottom: 0px;
+			left:0px; /* Not a must - can be 0 - but it makes the appearance of the content a bit nicer */
+			width: 100%;
+		}
+
+#scroller {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
+#scroller ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 99.5%;
+	text-align: left;
+}
+
+#scroller li {
+	margin-left: 0px;
+	padding: 0 10px;
+	height: 80px;
+	line-height: 80px;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #fff;
+	background-color: #fafafa;
+	font-size: 14px;
+}
+
 </style>
 
 
@@ -138,12 +189,18 @@
 				</div>
 
 				<div class="panel" data-title="我发出的邀请" id="sInviteInfo"
-					data-load='initSInviteInfoList'>
+					data-load='initSInviteInfoList' style="overflow-y: hidden;">
 					<header>
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>我发出的邀请</h1>
 					</header>
-					<div class="content"></div>
+					<div class="content">
+						<div id="wrapper">
+							<div id="scroller">
+								<ul class="list" id="sInviteInfoList"></ul>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<div class="panel" data-title="选择时间" id="invite"

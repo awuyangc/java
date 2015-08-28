@@ -43,4 +43,6 @@ public interface InviteInfoMapper {
      * @mbggenerated Mon Jun 29 11:27:27 CST 2015
      */
     int updateByPrimaryKey(InviteInfo record);
+    
+    List<InviteInfo> getMyInviteInfo(String openId);
 }

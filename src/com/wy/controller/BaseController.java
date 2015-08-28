@@ -161,4 +161,19 @@ public class BaseController {
 			return null;
 		}
 	}
+	
+	@RequestMapping("/getSInviteInfo")
+	@ResponseBody
+	public List<InviteInfo> getSInviteInfo(HttpSession session){
+		SNSUserInfo snsUserInfo=(SNSUserInfo) session.getAttribute("snsUserInfo");
+		if(snsUserInfo!=null)
+		{
+		List<InviteInfo> inviteInfo=inviteInfoService.getMyInviteInfoList(snsUserInfo.getOpenId());
+		return inviteInfo;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

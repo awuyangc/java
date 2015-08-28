@@ -459,6 +459,20 @@ function initRInviteInfoList()
 function initSInviteInfoList()
 {
 	wx.hideOptionMenu();
+	var sInviteInfoList="";
+	$.ajax({
+		async:false,
+        url: "getSInviteInfo.action?rd="+Math.random(),
+        success: function (data) {
+        	$(data).each(function(i,val){
+        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage("+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>"
+        	});
+        	$("#sInviteInfoList").html(sInviteInfoList);
+        }
+    });
+	//加载iscroll
+	var myScroll = new IScroll('#wrapper');
+	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 }
 
 function dispatchPanelEvent(fnc,myPanel){
