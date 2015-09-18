@@ -39,6 +39,8 @@
 	type="text/css" />
 <link href="js/mobiscroll/css/mobiscroll.scroller.android-holo.css"
 	rel="stylesheet" type="text/css" />
+<link href="js/mobiscroll/css/mobiscroll.scroller.ios-classic.css"
+	rel="stylesheet" type="text/css" />
 <script src="js/mobiscroll/js/mobiscroll.appframework.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.core.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.frame.js"></script>
@@ -49,7 +51,6 @@
 <script src="js/mobiscroll/js/mobiscroll.select.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.frame.android-holo.js"></script>
 <script src="js/mobiscroll/js/i18n/mobiscroll.i18n.zh.js"></script>
-
 <script src="js/iscroll5/iscroll.js"></script>
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/index.js"></script>
@@ -125,9 +126,15 @@
 	<div id="afui" class="ios7">
 
 		<div id="splashscreen" class="ui-loader heavy">
-			<font id="userNickNameSplash"></font> <br> <br> <span
-				class="ui-icon ui-icon-loading spin"></span>
-			<h1>一伙锅准备中</h1>
+			<div>
+				<font id="userNickNameSplash" style="font-size:35px;color:#ff5B25;font-family:'方正舒体'"></font>
+			</div>
+			<br> <br> 
+			<div style="text-align:center">
+				<img src="img/splashscreen.gif">
+			</div>
+			<!-- <span class="ui-icon ui-icon-loading spin"></span> -->
+			
 		</div>
 
 		<div class="view" id="mainview">
@@ -138,12 +145,10 @@
 				<div class="panel" data-title="主页" id="main" data-selected="true"
 					data-load='initMain'>
 					<header>
-						<h1>主页</h1>
+							<h1><font color="#D16623">欢迎您！</font><font color="white" id="userNickName"></font></h1>
 					</header>
 					<div class="content">
-						<div style="margin-top: 10px">
-							欢迎您！<font color="red" id="userNickName"></font>
-						</div>
+						
 						<div>
 							<div style="float: left; width: 50%;">
 								<a class="button icon phone" href="#invite">立即邀约朋友</a>
@@ -208,8 +213,8 @@
 					<header>
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>选择时间</h1>
-						<a href="#restaurant" class="button next" id="btnChooseArea"
-							style="float: right; margin-right: 25px">下一步</a>
+						<a href="#confirmInvite" class="button next" id="btnChooseArea"
+							style="float: right; margin-right: 25px;">下一步</a>
 					</header>
 					<div class="content">
 						<div>
@@ -267,16 +272,17 @@
 					</div>
 				</div>
 
-				<div class="panel" data-title="您的邀请信息" id="confirmInvite"
+				<div class="panel" data-title="您的邀请信息" id="confirmInvite" style="background-image: url(img/orderInfo.png);background-size:100% 100%" 
 					data-load='initConfirmInvite'>
-					<header>
-						<a href="javascript:;" class="button backButton">返回</a>
+					<!-- <header>
+						 <a href="javascript:;" class="button backButton">返回</a>
 						<h1>您的邀请信息</h1>
 						<a href="#shareInvite" class="button next" id="btnConfirmInvite"
-							style="float: right; margin-right: 25px">确认</a>
-					</header>
+							style="float: right; margin-right: 25px;">确认</a>
+					</header>-->
 					<div class="content">
 						<div id="inviteInfo"></div>
+						<div id="btnShare"></div>
 					</div>
 				</div>
 

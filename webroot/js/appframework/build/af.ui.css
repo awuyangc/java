@@ -273,7 +273,7 @@
   width: 100%;
   left: 0;
   min-height: 120%;
-  background: #1d1d1c !important;
+  background: #ebebeb !important;
   color: white !important;
   font-size: 30px;
   text-align: center;
@@ -3229,24 +3229,25 @@ li .icon:before {
   font-family: 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .ios7 .view header {
-  background: #f8f8f8;
+  background: #ff873B;
   color: inherit;
   border: none;
   border-bottom: 1px solid #c8c7cc;
 }
 .ios7 .view header .button {
-  color: #157dfb;
+  /*color: #157dfb;*/
   border-color: transparent;
   font-size: 14px;
   font-weight: normal;
 }
 .ios7 .view header h1 {
-  color: inherit;
+  /*color: inherit;*/
   text-shadow: none;
+  font-weight:normal;
 }
 .ios7 .view header .backButton {
   background: #f8f8f8;
-  color: #157dfb;
+  /*color: #157dfb;*/
   display: block;
   position: absolute;
   line-height: 44px;
@@ -3410,6 +3411,9 @@ li .icon:before {
 }
 .ios7 .button.next {
   border: none;
+  padding-top:6px;
+  background-color:transparent;
+  color:white;
 }
 .ios7 .button.previous::after {
   color: #157dfb;
@@ -3439,12 +3443,12 @@ li .icon:before {
   background-color: transparent;
 }
 .ios7 .button.next::after {
-  color: #157dfb;
+  color: white;
   z-index: -1;
   font-size: 22px;
   position: absolute;
-  top: 6px;
-  right: -25px;
+  /*top: 6px;*/
+  right: -20px;
   text-align: center;
   border-radius: 0;
   border: none;

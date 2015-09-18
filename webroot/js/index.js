@@ -1,7 +1,9 @@
  $.afui.autoLaunch=false;
  $.afui.useOSThemes=false;
+
  //判断是否需要跳转到指定页面
  $.afui.ready(function(){
+	 
 		//$.afui.setBackButtonText("返回");
 		//$.afui.setBackButtonVisibility(false)
  });
@@ -86,7 +88,7 @@
 	         url: "weixin/getSession.action",
 	         success: function (data) {
 	        	 $("#userNickName").text(data.nickname);
-	        	 $("#userNickNameSplash").text("您好！"+data.nickname);
+	        	 $("#userNickNameSplash").text("您好,"+data.nickname);
 	        	 $("#openId").val(data.openId);
 	        	 $("#nickname").val(data.nickname);
 	         }
@@ -97,9 +99,18 @@
 function initInvite()
 {
 	//wx.hideOptionMenu();
-	$("#invite-day").mobiscroll().date({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
-	$("#invite-begin").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
-	$("#invite-end").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'android-holo', display: 'modal'});
+	$("#invite-day").mobiscroll().date({mode:'scroller', lang:'zh', theme: 'mobiscroll', display: 'modal',minDate: new Date()});
+	$("#invite-begin").mobiscroll().time();
+	$("#invite-begin").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'mobiscroll', display: 'modal', 
+		onSelect: function(valueText,inst)
+		{
+			//alert($.mobiscroll.datetime.formatDate('hh:mm', new Date()));
+			var invite_end=$.mobiscroll.datetime.formatDate('HH:ii', new Date(new Date(inst.getVal()).getTime()+3600000*2));
+			$("#invite-end").val(invite_end);
+			$("#invite-end").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'mobiscroll', display: 'modal',date:invite_end});
+		}
+	});
+	$("#invite-end").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'mobiscroll', display: 'modal'});
 	$("#btnChooseArea").unbind().click(function (){
 		var inviteDay=$("#invite-day").val();
 		var inviteBegin=$("#invite-begin").val();
@@ -118,6 +129,14 @@ function initInvite()
 	});
 }
  
+//日期变动时触发
+function mobiscroll_change(valueText,inst){
+	alert(valueText);
+	$("#invite-end").val();
+}
+
+
+
 //选择餐厅
 function initRestaurant()
 {
@@ -233,7 +252,7 @@ function initConfirmInvite()
 	var inviteBegin=$("#invite-begin").val();
 	var inviteEnd=$("#invite-end").val();
 	var inviteAddress=$('#restaurantId').val();
-	$("#inviteInfo").html("<font>您的邀请单详细信息如下：<br>日期："+inviteDay+"<br>时间段："+inviteBegin+" 到 "+inviteEnd+"<br>地点:"+$('#restaurantName').val()+"</font>");
+	$("#inviteInfo").html("<font>您的邀请单详细信息如下：<br>日期："+inviteDay+"<br>时间段："+inviteBegin+" 到 "+inviteEnd+"<br></font>");
 	//保存邀请单相关信息
 	$("#btnConfirmInvite").unbind().click(function(){
 		
@@ -530,4 +549,24 @@ function dispatchPanelEvent(fnc,myPanel){
 	        	//$.afui.loadContent("#rInviteInfo",false,false,"up");
 	        }
 	    });
+ }
+ 
+ function format()
+ {
+	 var o = {
+			 "M+" : this.getMonth()+1, //month
+			 "d+" : this.getDate(), //day
+			 "h+" : this.getHours(), //hour
+			 "m+" : this.getMinutes(), //minute
+			 "s+" : this.getSeconds(), //second
+			 "q+" : Math.floor((this.getMonth()+3)/3), //quarter
+			 "S" : this.getMilliseconds() //millisecond
+			 }
+			 if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+			 (this.getFullYear()+"").substr(4- RegExp.$1.length));
+			 for(var k in o)if(new RegExp("("+ k +")").test(format))
+			 format = format.replace(RegExp.$1,
+			 RegExp.$1.length==1? o[k] :
+			 ("00"+ o[k]).substr((""+ o[k]).length));
+			 return format;
  }

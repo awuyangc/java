@@ -142,18 +142,21 @@ public class MenuManager {
 		btn13.setType("view");
 		btn13.setUrl("http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn="+Math.random());
 		
+		/*
 		ViewButton btn21 = new ViewButton();
 		btn21.setName("如何使用一伙锅");
 		btn21.setType("view");
 		btn21.setUrl("http://www.baidu.com/");
-		
+		*/
 		ComplexButton mainBtn1 = new ComplexButton();
 		mainBtn1.setName("火锅走起");
 		mainBtn1.setSub_button(new Button[] { btn11, btn12, btn13});
 		
+		/*
 		ComplexButton mainBtn2 = new ComplexButton();
 		mainBtn2.setName("帮助");
 		mainBtn2.setSub_button(new Button[] { btn21});
+		*/
 		/*
 		ComplexButton mainBtn1 = new ComplexButton();
 		mainBtn1.setName("邀约锅友");
@@ -173,7 +176,8 @@ public class MenuManager {
 		 * menu.setButton(new Button[] { mainBtn1, mainBtn2, btn33 });
 		 */
 		Menu menu = new Menu();
-		menu.setButton(new Button[] { mainBtn1, mainBtn2});
+		//menu.setButton(new Button[] { mainBtn1, mainBtn2});
+		menu.setButton(new Button[] { mainBtn1});
 		return menu;
 	}
 }
