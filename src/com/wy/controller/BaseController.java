@@ -6,27 +6,28 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qq.weixin.message.model.SNSUserInfo;
-import com.qq.weixin.utils.AdvancedUtil;
 import com.qq.weixin.utils.HttpRequestUtil;
+import com.wy.model.BaiduPoi;
 import com.wy.model.InviteInfo;
 import com.wy.model.JoinInfo;
-import com.wy.model.WeixinUser;
+import com.wy.service.IBaiduPoiService;
 import com.wy.service.IInviteInfoService;
 import com.wy.service.IJoinInfoService;
-import com.wy.service.IUserService;
 import com.wy.service.IWeixinUserService;
+import com.wy.util.JsonPluginsUtil;
 
 @Controller
 @RequestMapping("/")
@@ -38,6 +39,8 @@ public class BaseController {
 	private IWeixinUserService weixinUserService;
 	@Resource
 	private IJoinInfoService joinInfoService;
+	@Resource
+	private IBaiduPoiService baiduPoiService;
 	
 	@RequestMapping("/index")
 	public String toIndex(String page,String inviteId){
@@ -184,7 +187,23 @@ public class BaseController {
 	@ResponseBody
 	public String  getBaiduPoi(HttpSession session,String requestUrl){
 		JSONObject jsonObject = HttpRequestUtil.httpRequest(requestUrl,"json");
+		BaiduPoi baiduPoi=new BaiduPoi();
+		//JSONArray baiduPoiArray=(JSONArray) jsonObject.get("results");
+		Map poiMap=JsonPluginsUtil.parseJSON2Map(jsonObject.get("results").toString().replace('[',' ').replace(']', ' '));
 		
+		
+		/*
+		 for(int i=0;i<baiduPoiArray.size();i++)
+		{
+			JSONObject baiduPoiJson=(JSONObject) baiduPoiArray.get(i);
+		} 
+		 * BeanUtils.copyProperties(jsonObject.get("result"), baiduPoi);
+		 while(it.hasNext())
+		 {
+			 String key = (String) it.next();
+             String value = jsonObject.getString(key); //类型强转失败会异常 
+		 }
+		 */
 		return "ok";
 	}
 	

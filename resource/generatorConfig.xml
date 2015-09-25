@@ -17,7 +17,8 @@
      <!-- <table tableName="t_wx_user" domainObjectName="WeixinUser" ></table> -->
      <!-- <table tableName="t_jsapi_ticket" domainObjectName="JsapiTicket" ></table>-->
      <!-- <table tableName="t_invite_info" domainObjectName="InviteInfo" ></table>-->
-     <table tableName="t_join_info" domainObjectName="JoinInfo" ></table>
+     <!--  <table tableName="t_join_info" domainObjectName="JoinInfo" ></table>-->
+     <table tableName="t_poi" domainObjectName="BaiduPoi" ></table>
   </context>
 </generatorConfiguration>
 
