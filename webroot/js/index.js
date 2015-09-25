@@ -140,6 +140,7 @@ function mobiscroll_change(valueText,inst){
 //选择餐厅
 function initRestaurant()
 {
+	/*
 	$.ajax({
 	   	dataType : "jsonp",
 	       url: "http://yuntuapi.amap.com/datasearch/local?tableid=55656259e4b0ccb608f13383&city=全国&keywords= &limit=50&page=1&key=a46ffb73729bb688480643eea31387e7",
@@ -158,7 +159,46 @@ function initRestaurant()
 	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
 		       }
 		     });
-
+	//微信获得当前地址
+	 var latitude =""; // 纬度，浮点数，范围为90 ~ -90
+	 var longitude =""; // 经度，浮点数，范围为180 ~ -180。
+	 var speed = ""; // 速度，以米/每秒计
+	 var accuracy ="" 
+	 wx.getLocation({
+	    success: function (res) {
+	        latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+	        longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+	        speed = res.speed; // 速度，以米/每秒计
+	        accuracy = res.accuracy; // 位置精度
+	    },
+	    cancel: function (res) {
+	        alert('您拒绝授权获取地理位置！');
+	    } 
+	});
+	*/
+	//$.afui.loadContent("http://www.baidu.com");
+	//微信获得当前地址
+	 $.ajax({
+ 	   	   dataType : "jsonp",
+ 	       url: "http://api.map.baidu.com/place/v2/search?ak=0XpknrkEnkVWwHCDHeEneVcq&output=json&query=%E7%81%AB%E9%94%85&page_size=100&page_num=0&scope=2&region=%E6%AD%A6%E6%B1%89",
+ 	       success: function (result) {
+ 	       	 var listRestaurant=""; 
+ 	       	 $(result.results).each(function(i,val){
+ 	       		listRestaurant +='<li id="li'+val.uid+'">'+
+ 					 			 '<a href="#restaurantDetail"  onclick="setSessionStorage(\'lat\','+val.location.lat+');setSessionStorage(\'lng\','+val.location.lng+');">'+
+ 	       						//'<a href="'+val.detail_info.detail_url+'">'+
+ 	       						//'<a href="http://map.baidu.com/mobile/">'+
+ 	       						//'<img src="'+val.detail_info.image_num+'">'+
+ 								 '<h2>'+val.name+'</h2>'+
+ 								 '<p>'+val.address+'</p>'+
+ 								 '</a>'+
+ 								 '</li>';
+ 	          	  }); 
+ 	          	 $("#listRestaurant").html(listRestaurant);
+ 	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
+ 	       	 	 //添加监控
+ 		       }
+ 	 });
 }
  
 //查看餐厅明细地址
@@ -166,6 +206,7 @@ function initRrestaurantDetail()
 {
 	//隐藏右上角按钮
 	wx.hideOptionMenu();
+	/*
 	var windowsArr = [];  
 	var marker = [];
 	//基本地图加载
@@ -232,7 +273,25 @@ function initRrestaurantDetail()
 	function onmouseout_MarkerStyle(pointid,thiss) {   
 	   thiss.style.background="";  
 	}
-
+	*/
+	 
+	 var lat=sessionStorage.getItem("lat");
+	 var lng=sessionStorage.getItem("lng");
+	 var map = new BMap.Map("mapContainer"); 
+	 var poi= new BMap.Point(lng,lat);
+	 map.centerAndZoom(poi,12);  
+	 map.enableScrollWheelZoom();  
+	 var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
+     '<img src="../img/baidu.jpg" alt="" style="float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;"/>' +
+     '地址：北京市海淀区上地十街10号<br/>电话：(010)59928888<br/>简介：百度大厦位于北京市海淀区西二旗地铁站附近，为百度公司综合研发及办公总部。' +
+   '</div>';
+	 map.addControl(new BMap.NavigationControl());  
+	 map.addControl(new BMap.ScaleControl());    
+	 map.addControl(new BMap.OverviewMapControl());    
+	 map.addControl(new BMap.MapTypeControl());   
+	 var stCtrl = new BMap.PanoramaControl();  
+	 stCtrl.setOffset(new BMap.Size(20, 20));  
+	 map.addControl(stCtrl);
 }
 
 //离开餐厅明细时清空页面dom。防止下次加载时显示上次的信息。
@@ -243,8 +302,7 @@ function unloadRrestaurantDetail()
 
 //用户确认邀请信息
 function initConfirmInvite()
-{
-	wx.hideOptionMenu();
+{	
 	//用户邀请单的相关信息
 	var inviteId=$("#inviteId").val();
 	var inviteOpenid=$("#openId").val();
@@ -254,8 +312,7 @@ function initConfirmInvite()
 	var inviteAddress=$('#restaurantId').val();
 	$("#inviteInfo").html("<font>您的邀请单详细信息如下：<br>日期："+inviteDay+"<br>时间段："+inviteBegin+" 到 "+inviteEnd+"<br></font>");
 	//保存邀请单相关信息
-	$("#btnConfirmInvite").unbind().click(function(){
-		
+	$("#btnConfirmInvite").unbind().click(function(){	
 		$.ajax({
 			async: false,
 	        url: "saveInviteInfo.action",
@@ -273,6 +330,25 @@ function initConfirmInvite()
 	        }
 	    });  
 	});
+	
+	$("#btnshare").unbind().click(function(){
+		  var w=document.documentElement.scrollWidth;
+		  var h=document.documentElement.scrollHeight;
+		  var bw=document.documentElement.clientWidth;
+		  var bh=document.documentElement.clientHeight;
+		  var x=document.documentElement.scrollLeft?document.documentElement.scrollLeft:document.body.scrollLeft;
+		  var y=document.documentElement.scrollTop?document.documentElement.scrollTop:document.body.scrollTop;
+		  $("#cover").css("display","block");
+		  $("#cover").css("width",(bw>w?bw:w)+"px");
+		  $("#cover").css("height",(bh>h?bh:h)+"px");
+	      $("#guide").css("display","block");
+	      $("#guide").css("top",(y+5)+"px");
+		  $("#cover").unbind().click(function(){
+			 $("#cover").css("display","none");
+	         $("#guide").css("display","none");
+		  });
+	});
+
 }
 
 //分享邀请单
@@ -466,7 +542,7 @@ function initRInviteInfoList()
         url: "getRInviteInfo.action?rd="+Math.random(),
         success: function (data) {
         	$(data).each(function(i,val){
-        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage("+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>"
+        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage('inviteId',"+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>"
         	});
         	
         	$("#rInviteInfoList").html(rInviteInfoList);
@@ -484,7 +560,7 @@ function initSInviteInfoList()
         url: "getSInviteInfo.action?rd="+Math.random(),
         success: function (data) {
         	$(data).each(function(i,val){
-        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage("+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>"
+        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage('inviteId',"+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>"
         	});
         	$("#sInviteInfoList").html(sInviteInfoList);
         }
@@ -535,11 +611,12 @@ function dispatchPanelEvent(fnc,myPanel){
 	 window.location.href="#"+page;
  }
  
- function setSessionStorage(inviteId)
+ function setSessionStorage(key,value)
  {
-	 sessionStorage.setItem("inviteId",inviteId); 
+	 sessionStorage.setItem(key,value); 
  }
  
+ //模拟微信登陆
  function login()
  {
 	 $.ajax({
@@ -547,6 +624,23 @@ function dispatchPanelEvent(fnc,myPanel){
 	        success: function (data) {
 	        	 location.reload();
 	        	//$.afui.loadContent("#rInviteInfo",false,false,"up");
+	        }
+	    });
+ }
+ 
+ //爬取百度poi
+ function getBaiduPoi()
+ {
+	 //设置爬取参数
+	 var ak="0XpknrkEnkVWwHCDHeEneVcq";
+	 var query="火锅";
+	 var region="武汉";
+	 var requestUrl=encodeURI("http://api.map.baidu.com/place/v2/search?ak="+ak+"&output=json&query="+query+"&page_size=100&page_num=0&scope=2&region="+region);
+	 $.ajax({
+	        url: "getBaiduPoi.action",
+	        data:{"requestUrl":requestUrl},
+	        success: function (data) {
+	        	alert("爬取成功！");
 	        }
 	    });
  }
@@ -570,3 +664,5 @@ function dispatchPanelEvent(fnc,myPanel){
 			 ("00"+ o[k]).substr((""+ o[k]).length));
 			 return format;
  }
+ 
+ 

@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import net.sf.json.JSONObject;
 /**
  * httpRequest工具类
  * @author Administrator
@@ -94,5 +96,43 @@ public class HttpRequestUtil {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public static JSONObject httpRequest(String requestUrl,String type) {
+		StringBuffer buffer = new StringBuffer();
+		try {
+			URL url = new URL(requestUrl);
+			HttpURLConnection httpUrlConn = (HttpURLConnection) url
+					.openConnection();
+
+			httpUrlConn.setDoOutput(false);
+			httpUrlConn.setDoInput(true);
+			httpUrlConn.setUseCaches(false);
+
+			httpUrlConn.setRequestMethod("GET");
+			httpUrlConn.connect();
+
+			// 将返回的输入流转换成字符串
+			InputStream inputStream = httpUrlConn.getInputStream();
+			InputStreamReader inputStreamReader = new InputStreamReader(
+					inputStream, "utf-8");
+			BufferedReader bufferedReader = new BufferedReader(
+					inputStreamReader);
+
+			String str = null;
+			while ((str = bufferedReader.readLine()) != null) {
+				buffer.append(str);
+			}
+			bufferedReader.close();
+			inputStreamReader.close();
+			// 释放资源
+			inputStream.close();
+			inputStream = null;
+			httpUrlConn.disconnect();
+
+		} catch (Exception e) {
+		}
+		JSONObject jsonObject = JSONObject.fromObject(buffer.toString());  
+		return jsonObject;
 	}
 }

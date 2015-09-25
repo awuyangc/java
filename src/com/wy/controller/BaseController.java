@@ -10,6 +10,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qq.weixin.message.model.SNSUserInfo;
 import com.qq.weixin.utils.AdvancedUtil;
+import com.qq.weixin.utils.HttpRequestUtil;
 import com.wy.model.InviteInfo;
 import com.wy.model.JoinInfo;
 import com.wy.model.WeixinUser;
@@ -176,4 +179,13 @@ public class BaseController {
 			return null;
 		}
 	}
+	
+	@RequestMapping("/getBaiduPoi")
+	@ResponseBody
+	public String  getBaiduPoi(HttpSession session,String requestUrl){
+		JSONObject jsonObject = HttpRequestUtil.httpRequest(requestUrl,"json");
+		
+		return "ok";
+	}
+	
 }
