@@ -70,7 +70,7 @@
 	float: left;
 }
 
-#wrapper {
+.wrapper {
 			position: absolute;
 			z-index: 1;
 			top: 45px;
@@ -79,7 +79,7 @@
 			width: 100%;
 		}
 
-#scroller {
+.scroller {
 	position: absolute;
 	z-index: 1;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -101,7 +101,7 @@
 	text-size-adjust: none;
 }
 
-#scroller ul {
+.scroller ul {
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -109,7 +109,7 @@
 	text-align: left;
 }
 
-#scroller li {
+.scroller li {
 	margin-left: 0px;
 	padding: 0 10px;
 	height: 80px;
@@ -183,12 +183,12 @@
 						</div>
 						<div>
 						<div style="float: left; width: 50%">
-								<a class="button icon user" href="#" onclick="getBaiduPoi()">爬取百度数据</a>
+								<a id="btnPoi" class="button icon user" href="#" onclick="getBaiduPoi()">爬取百度数据</a>
 							</div>
 						</div>
 					</div>
 				</div>
-
+				
 				<div class="panel" data-title="我报名的邀请" id="rInviteInfo"
 					data-load='initRInviteInfoList'>
 					<header>
@@ -207,10 +207,8 @@
 						<h1>我发出的邀请</h1>
 					</header>
 					<div class="content">
-						<div id="wrapper">
-							<div id="scroller">
+						<div class="wrapper">
 								<ul class="list" id="sInviteInfoList"></ul>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -280,10 +278,9 @@
 						<div
 							style="width: 20%; float: left; font-size: 20px; text-align: center">其它</div>
 					</div>
-					<div>
-						<ul class="list" id="listRestaurant">
-						</ul>
-					</div>
+						<div class="wrapper">
+							<ul class="list" id="listRestaurant"></ul>
+						</div>
 					</div>
 				</div>
 

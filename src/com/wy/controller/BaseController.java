@@ -185,12 +185,11 @@ public class BaseController {
 	
 	@RequestMapping("/getBaiduPoi")
 	@ResponseBody
-	public String  getBaiduPoi(HttpSession session,String requestUrl){
+	public JSONArray  getBaiduPoi(HttpSession session,String requestUrl){
 		JSONObject jsonObject = HttpRequestUtil.httpRequest(requestUrl,"json");
 		BaiduPoi baiduPoi=new BaiduPoi();
-		//JSONArray baiduPoiArray=(JSONArray) jsonObject.get("results");
-		Map poiMap=JsonPluginsUtil.parseJSON2Map(jsonObject.get("results").toString().replace('[',' ').replace(']', ' '));
-		
+		JSONArray baiduPoiArray=(JSONArray) jsonObject.get("results");
+		Map poiMap=JsonPluginsUtil.parseJSON2Map(jsonObject);
 		
 		/*
 		 for(int i=0;i<baiduPoiArray.size();i++)
@@ -204,7 +203,7 @@ public class BaseController {
              String value = jsonObject.getString(key); //类型强转失败会异常 
 		 }
 		 */
-		return "ok";
+		return baiduPoiArray;
 	}
 	
 }

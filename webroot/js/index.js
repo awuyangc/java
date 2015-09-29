@@ -159,9 +159,11 @@ function initRestaurant()
 	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
 		       }
 		     });
+		     */
+	/*
 	//微信获得当前地址
-	 var latitude =""; // 纬度，浮点数，范围为90 ~ -90
-	 var longitude =""; // 经度，浮点数，范围为180 ~ -180。
+	 var latitude ="30.636295"; // 纬度，浮点数，范围为90 ~ -90
+	 var longitude ="114.176544"; // 经度，浮点数，范围为180 ~ -180。
 	 var speed = ""; // 速度，以米/每秒计
 	 var accuracy ="" 
 	 wx.getLocation({
@@ -170,34 +172,46 @@ function initRestaurant()
 	        longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 	        speed = res.speed; // 速度，以米/每秒计
 	        accuracy = res.accuracy; // 位置精度
+	        alert(longitude);
 	    },
 	    cancel: function (res) {
 	        alert('您拒绝授权获取地理位置！');
 	    } 
 	});
 	*/
-	//$.afui.loadContent("http://www.baidu.com");
-	//微信获得当前地址
+	 var latitude ="30.636295"; // 纬度，浮点数，范围为90 ~ -90
+	 var longitude ="114.176544"; // 经度，浮点数，范围为180 ~ -180。
+	 var url="http://api.map.baidu.com/geosearch/v3/nearby?ak=0XpknrkEnkVWwHCDHeEneVcq&geotable_id=121674&location="+longitude+","+latitude+"&q=火锅&radius=100000&page_index=0&page_size=10";
 	 $.ajax({
  	   	   dataType : "jsonp",
- 	       url: "http://api.map.baidu.com/place/v2/search?ak=0XpknrkEnkVWwHCDHeEneVcq&output=json&query=%E7%81%AB%E9%94%85&page_size=100&page_num=0&scope=2&region=%E6%AD%A6%E6%B1%89",
+ 	   	   url:url,
+ 	       //url: "http://api.map.baidu.com/place/v2/search?ak=0XpknrkEnkVWwHCDHeEneVcq&output=json&query=%E7%81%AB%E9%94%85&page_size=100&page_num=0&scope=2&region=%E6%AD%A6%E6%B1%89",
  	       success: function (result) {
  	       	 var listRestaurant=""; 
- 	       	 $(result.results).each(function(i,val){
+ 	       	 $(result.contents).each(function(i,val){
  	       		listRestaurant +='<li id="li'+val.uid+'">'+
- 					 			 '<a href="#restaurantDetail"  onclick="setSessionStorage(\'lat\','+val.location.lat+');setSessionStorage(\'lng\','+val.location.lng+');">'+
+ 					 			 '<a href="#restaurantDetail"  onclick="setSessionStorage(\'lat\','+val.location[0]+');setSessionStorage(\'lng\','+val.location[1]+');">';
  	       						//'<a href="'+val.detail_info.detail_url+'">'+
  	       						//'<a href="http://map.baidu.com/mobile/">'+
- 	       						//'<img src="'+val.detail_info.image_num+'">'+
- 								 '<h2>'+val.name+'</h2>'+
+ 				if(val.headImgUrl!=undefined)
+ 					{
+ 						listRestaurant += '<img src="'+val.headImgUrl.big+'">';
+ 					}
+ 				else
+ 					{
+ 						listRestaurant += '<img src="img/c/qrcode_for_gh_be461b35d165_344.jpg">';
+ 					}
+ 	       						
+ 				listRestaurant +='<h2>'+val.title+'</h2>'+
  								 '<p>'+val.address+'</p>'+
  								 '</a>'+
  								 '</li>';
  	          	  }); 
  	          	 $("#listRestaurant").html(listRestaurant);
- 	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
- 	       	 	 //添加监控
- 		       }
+ 	          	//加载iscroll
+ 	        	var myScroll = new IScroll('.wrapper');
+ 	        	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+ 		   }
  	 });
 }
  
@@ -566,7 +580,7 @@ function initSInviteInfoList()
         }
     });
 	//加载iscroll
-	var myScroll = new IScroll('#wrapper');
+	var myScroll = new IScroll('.wrapper');
 	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 }
 
@@ -636,11 +650,22 @@ function dispatchPanelEvent(fnc,myPanel){
 	 var query="火锅";
 	 var region="武汉";
 	 var requestUrl=encodeURI("http://api.map.baidu.com/place/v2/search?ak="+ak+"&output=json&query="+query+"&page_size=100&page_num=0&scope=2&region="+region);
+	 var csv="title,address,longitude,latitude,coord_type,,icon_style_id,headImgUrl\r\n";
 	 $.ajax({
 	        url: "getBaiduPoi.action",
 	        data:{"requestUrl":requestUrl},
 	        success: function (data) {
-	        	alert("爬取成功！");
+	        	$(data).each(function(i,val){
+	        		var title=val.name;
+	        		var address=val.address;
+	        		var longitude=val.location.lng;
+	        		var latitude =val.location.lat;
+	        		var coord_type="";
+	        		var icon_style_id="";
+	        		var headImgUrl="";
+	        		csv +=title+","+address+","+longitude+","+latitude+","+"1,"+","+", \r\n";
+	        	});
+	        	alert(csv);
 	        }
 	    });
  }
@@ -664,5 +689,3 @@ function dispatchPanelEvent(fnc,myPanel){
 			 ("00"+ o[k]).substr((""+ o[k]).length));
 			 return format;
  }
- 
- 

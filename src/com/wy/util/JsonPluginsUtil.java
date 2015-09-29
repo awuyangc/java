@@ -10,10 +10,9 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public class JsonPluginsUtil {
-	public static Map<String, Object> parseJSON2Map(String jsonStr){  //把你的json转成map
+	public static Map<String, Object> parseJSON2Map(JSONObject json){  //把你的json转成map
 	       Map<String, Object> map = new HashMap<String, Object>();  
 	       //最外层解析  
-	        JSONObject json = JSONObject.fromObject(jsonStr);  
 	       for(Object k : json.keySet()){  
 	          Object v = json.get(k);   
 	           //如果内层还是数组的话，继续解析  
@@ -22,7 +21,7 @@ public class JsonPluginsUtil {
 	                Iterator<JSONObject> it = ((JSONArray)v).iterator();  
 	               while(it.hasNext()){  
 	                   JSONObject json2 = it.next();  
-	                    list.add(parseJSON2Map(json2.toString()));  
+	                    list.add(parseJSON2Map(json2));  
 	                }  
 	               map.put(k.toString(), list);  
 	            } else {  
