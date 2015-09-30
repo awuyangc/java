@@ -47,6 +47,10 @@ public class BaseController {
 		return "index.html?page="+page+"&inviteId="+inviteId+"&rd="+Math.random();
 	}
 	
+	@RequestMapping("/time")
+	public String toTime(){
+		return "time.html?&rd="+Math.random();
+	}
 	
 	@RequestMapping("/signUp")
 	public String toSignUp(String inviteId){

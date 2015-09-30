@@ -189,8 +189,7 @@ function initRestaurant()
  	       success: function (result) {
  	       	 var listRestaurant=""; 
  	       	 $(result.contents).each(function(i,val){
- 	       		listRestaurant +='<li id="li'+val.uid+'">'+
- 					 			 '<a href="#restaurantDetail"  onclick="setSessionStorage(\'lat\','+val.location[0]+');setSessionStorage(\'lng\','+val.location[1]+');">';
+ 	       		listRestaurant +='<a class="list-group-item" href="#restaurantDetail"  onclick="setSessionStorage(\'lat\','+val.location[0]+');setSessionStorage(\'lng\','+val.location[1]+');">';
  	       						//'<a href="'+val.detail_info.detail_url+'">'+
  	       						//'<a href="http://map.baidu.com/mobile/">'+
  				if(val.headImgUrl!=undefined)
@@ -202,15 +201,11 @@ function initRestaurant()
  						listRestaurant += '<img src="img/c/qrcode_for_gh_be461b35d165_344.jpg">';
  					}
  	       						
- 				listRestaurant +='<h2>'+val.title+'</h2>'+
+ 				listRestaurant +='<h4>'+val.title+'</h4>'+
  								 '<p>'+val.address+'</p>'+
- 								 '</a>'+
- 								 '</li>';
+ 								 '</a>';
  	          	  }); 
  	          	 $("#listRestaurant").html(listRestaurant);
- 	          	//加载iscroll
- 	        	var myScroll = new IScroll('.wrapper');
- 	        	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
  		   }
  	 });
 }

@@ -26,6 +26,17 @@
 	
 <script src="js/weixin/jweixin-1.0.0.js"></script>
 
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet"
+	href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet"
+	href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 <!-- 日期控件 -->
 <!-- Mobiscroll JS and CSS Includes -->
 
@@ -150,43 +161,42 @@
 							<h1><font color="#D16623">欢迎您！</font><font color="white" id="userNickName"></font></h1>
 					</header>
 					<div class="content">
-						
-						<div>
-							<div style="float: left; width: 50%;">
-								<a class="button icon phone" href="#invite">立即邀约朋友</a>
+						<div class="container-fluid">
+							<div class="row menu">
+								<div class="col-xs-3">
+									<a class="menu-a" href="#invite"> <img src="img/huoguo1.jpg"
+										alt="火锅走起" class="menu-img"> <span class="menu-text">火锅走起</span>
+									</a>
+								</div>
+								<div class="col-xs-3">
+									<a class="menu-a" href="#rInviteInfo"> <img src="img/huoguo2.jpg"
+										alt="我的火锅" class="menu-img"> <span class="menu-text">我的火锅</span>
+									</a>
+								</div>
+								<div class="col-xs-3">
+									<a class="menu-a" href="#invite"> <img src="img/huoguo3.jpg"
+										alt="火锅偏好" class="menu-img"> <span class="menu-text">火锅偏好</span>
+									</a>
+								</div>
+								<div class="col-xs-3">
+									<a class="menu-a" href="#invite"> <img src="img/huoguo4.jpg"
+										alt="我的账号" class="menu-img"> <span class="menu-text">我的账号</span>
+									</a>
+								</div>
 							</div>
-							<div style="float: right; width: 50%;">
-								<a class="button icon info" href="#rInviteInfo">我报名的邀请</a>
+							<div class="row menu">
+								<div class="col-xs-3">
+									<a  href="#" onclick="login()"> <img
+										src="img/c/qrcode_for_gh_be461b35d165_258.jpg" alt="微信模拟登陆"
+										class="menu-img"> <span class="menu-text">模拟微信登陆(网页调试使用)</span>
+									</a>
+								</div>
+								<div class="col-xs-3"></div>
+								<div class="col-xs-3"></div>
+								<div class="col-xs-3"></div>
 							</div>
 						</div>
-						<div>
-							<div style="float: right; width: 50%;">
-								<a class="button icon info" href="#sInviteInfo">我发出的邀请</a>
-							</div>
-						</div>
-						<div>
-							<div style="float: left; width: 50%">
-								<a class="button icon heart" href="#invite">设置我的偏好</a>
-							</div>
-							<div style="float: right; width: 50%">
-								<a class="button icon mail" href="#invite">我的订单</a>
-							</div>
-						</div>
-						<div>
-							<div style="float: left; width: 50%">
-								<a class="button icon user" href="#invite">我的账号</a>
-							</div>
-							<div style="float: right; width: 50%">
-								<a class="button icon tools" href="#" onclick="login()"
-									data-transition="fade">模拟微信登陆(网页调试使用)</a>
-							</div>
-						</div>
-						<div>
-						<div style="float: left; width: 50%">
-								<a id="btnPoi" class="button icon user" href="#" onclick="getBaiduPoi()">爬取百度数据</a>
-							</div>
-						</div>
-					</div>
+					</div>	
 				</div>
 				
 				<div class="panel" data-title="我报名的邀请" id="rInviteInfo"
@@ -278,9 +288,7 @@
 						<div
 							style="width: 20%; float: left; font-size: 20px; text-align: center">其它</div>
 					</div>
-						<div class="wrapper">
-							<ul class="list" id="listRestaurant"></ul>
-						</div>
+						  <div class="list-group" id="listRestaurant"></div>
 					</div>
 				</div>
 
