@@ -170,7 +170,12 @@
 								</div>
 								<div class="col-xs-3">
 									<a class="menu-a" href="#rInviteInfo"> <img src="img/huoguo2.jpg"
-										alt="我的火锅" class="menu-img"> <span class="menu-text">我的火锅</span>
+										alt="我报名的邀请" class="menu-img"> <span class="menu-text">我报名的邀请</span>
+									</a>
+								</div>
+								<div class="col-xs-3">
+									<a class="menu-a" href="#sInviteInfo"> <img src="img/huoguo2.jpg"
+										alt="我发出的邀请" class="menu-img"> <span class="menu-text">我发出的邀请</span>
 									</a>
 								</div>
 								<div class="col-xs-3">
@@ -178,20 +183,19 @@
 										alt="火锅偏好" class="menu-img"> <span class="menu-text">火锅偏好</span>
 									</a>
 								</div>
+							</div>
+							<div class="row menu">
 								<div class="col-xs-3">
 									<a class="menu-a" href="#invite"> <img src="img/huoguo4.jpg"
 										alt="我的账号" class="menu-img"> <span class="menu-text">我的账号</span>
 									</a>
 								</div>
-							</div>
-							<div class="row menu">
 								<div class="col-xs-3">
 									<a  href="#" onclick="login()"> <img
 										src="img/c/qrcode_for_gh_be461b35d165_258.jpg" alt="微信模拟登陆"
 										class="menu-img"> <span class="menu-text">模拟微信登陆(网页调试使用)</span>
 									</a>
 								</div>
-								<div class="col-xs-3"></div>
 								<div class="col-xs-3"></div>
 								<div class="col-xs-3"></div>
 							</div>
@@ -324,13 +328,16 @@
 					</header>
 					<div class="content">
 						<div style="margin-bottom: 30px">
-							<h2 id="inviteSignInfo"></h2>
+							<h4 id="inviteSignInfo"></h4>
 						</div>
 						<div>
-							<ul id="restaurantInfo"></ul>
+							<h2>推荐餐厅</h2>
+							<div class="list-group" id="restaurantInfo"></div>
+							<div>为什么选这一家？</div>
+							<hr>
 						</div>
 						<div>
-							<h2>已报名的用户：</h2>
+							<h2>Ta们也接受了邀请：</h2>
 						</div>
 						<div id="signUserList"></div>
 						<a href="#" id="btnSignUp" class="button">我要报名</a> <a href="#"

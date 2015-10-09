@@ -31,25 +31,25 @@
 								'checkJsApi',
 								'onMenuShareTimeline',
 								'onMenuShareAppMessage',
-								'onMenuShareQQ',
-								'onMenuShareWeibo',
+								//'onMenuShareQQ',
+								//'onMenuShareWeibo',
 								'hideMenuItems',
 								'showMenuItems',
 								'hideAllNonBaseMenuItem',
 								'showAllNonBaseMenuItem',
-								'translateVoice',
-								'startRecord',
-								'stopRecord',
-								'onRecordEnd',
-								'playVoice',
-								'pauseVoice',
-								'stopVoice',
-								'uploadVoice',
-								'downloadVoice',
-								'chooseImage',
-								'previewImage',
-								'uploadImage',
-								'downloadImage',
+								//'translateVoice',
+								//'startRecord',
+								//'stopRecord',
+								//'onRecordEnd',
+								//'playVoice',
+								//'pauseVoice',
+								//'stopVoice',
+								//'uploadVoice',
+								//'downloadVoice',
+								//'chooseImage',
+								//'previewImage',
+								//'uploadImage',
+								//'downloadImage',
 								'getNetworkType',
 								'openLocation',
 								'getLocation',
@@ -57,11 +57,11 @@
 								'showOptionMenu',
 								'closeWindow',
 								'scanQRCode',
-								'chooseWXPay',
-								'openProductSpecificView',
-								'addCard',
-								'chooseCard',
-								'openCard'
+								//'chooseWXPay',
+								'openProductSpecificView'
+								//'addCard',
+								//'chooseCard',
+								//'openCard'
 		  	      ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 		  	});
 		  }
@@ -314,31 +314,13 @@ function initConfirmInvite()
 {	
 	//用户邀请单的相关信息
 	var inviteId=$("#inviteId").val();
+	var nickname=$("#nickname").val();
 	var inviteOpenid=$("#openId").val();
 	var inviteDay=$("#invite-day").val();
 	var inviteBegin=$("#invite-begin").val();
 	var inviteEnd=$("#invite-end").val();
 	var inviteAddress=$('#restaurantId').val();
-	$("#inviteInfo").html("<font>您的邀请单详细信息如下：<br>日期："+inviteDay+"<br>时间段："+inviteBegin+" 到 "+inviteEnd+"<br></font>");
-	//保存邀请单相关信息
-	$("#btnConfirmInvite").unbind().click(function(){	
-		$.ajax({
-			async: false,
-	        url: "saveInviteInfo.action",
-	        data:{
-	        	  "id":inviteId,
-	        	  "inviteOpenid":inviteOpenid,
-	        	  "inviteDay":inviteDay,
-	        	  "inviteBegin":inviteBegin,
-	        	  "inviteEnd":inviteEnd,
-	        	  "inviteAddress":inviteAddress
-	        		},
-	        success: function (data) {
-	        	$("#inviteId").val(data.id);
-	        	$("#shareInfo").show();
-	        }
-	    });  
-	});
+	//$("#inviteInfo").html("<font>您的邀请单详细信息如下：<br>日期："+inviteDay+"<br>时间段："+inviteBegin+" 到 "+inviteEnd+"<br></font>");
 	
 	$("#btnshare").unbind().click(function(){
 		  var w=document.documentElement.scrollWidth;
@@ -357,30 +339,36 @@ function initConfirmInvite()
 	         $("#guide").css("display","none");
 		  });
 	});
-
-}
-
-//分享邀请单
-function shareInvite()
-{
-	wx.showOptionMenu();
-	var inviteId=$("#inviteId").val();
-	var nickname=$("#nickname").val();
-	//分享给朋友
+	
+	$.ajax({
+		async: false,
+        url: "saveInviteInfo.action",
+        data:{
+        	  "id":inviteId,
+        	  "inviteOpenid":inviteOpenid,
+        	  "inviteDay":inviteDay,
+        	  "inviteBegin":inviteBegin,
+        	  "inviteEnd":inviteEnd,
+        	  "inviteAddress":inviteAddress
+        		},
+        success: function (data) {
+        	$("#inviteId").val(data.id);
+        	//$("#shareInfo").show();
+        }
+    });  
+	
 	wx.onMenuShareAppMessage({
 	    title: '一伙锅', // 分享标题
 	    desc: '您的好友 '+nickname+' 邀请您参加一伙锅！', // 分享描述
-	    link: 'http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
+	    link: 'http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+$("#inviteId").val(), // 分享链接
 	    imgUrl: 'http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg', // 分享图标
 	    type: '', // 分享类型,music、video或link，不填默认为link
 	    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 	    success: function () { 
 	        // 用户确认分享后执行的回调函数
-	    	//alert(1);
 	    },
 	    cancel: function () { 
 	        // 用户取消分享后执行的回调函数
-	    	//alert(2);
 	    }
 	});
 	
@@ -397,6 +385,23 @@ function shareInvite()
 	        // 用户取消分享后执行的回调函数
 	    }
 	});
+	
+
+}
+
+//分享邀请单
+function shareInvite()
+{
+	wx.showOptionMenu();
+	var inviteId=$("#inviteId").val();
+	var nickname=$("#nickname").val();
+	var inviteOpenid=$("#openId").val();
+	var inviteDay=$("#invite-day").val();
+	var inviteBegin=$("#invite-begin").val();
+	var inviteEnd=$("#invite-end").val();
+	var inviteAddress=$('#restaurantId').val();
+	alert("邀请单id:"+inviteId+" 昵称："+nickname+" 用户openId："+inviteOpenid+" 日期："+inviteDay+" 开始时间："+inviteBegin+" 结束时间："+inviteEnd+" 地点ID"+inviteAddress);
+	//分享给朋友
 }
 
 function initSignUp()
@@ -415,7 +420,8 @@ function initSignUp()
         url: "getInviteInfo.action",
         data:{"inviteId":inviteId},
         success: function (data) {
-        	$("#inviteSignInfo").html("您的好友 <font color='red'>"+data.weixinUser.nickname+"</font> 邀请您 <font color='blue'>"+data.inviteDay+"</font> 一伙锅");
+        	$("#inviteSignInfo").html("您的好友  \"<font color='red'>"+data.weixinUser.nickname+"</font>\" 邀请您 <font color='blue'>"+data.inviteDay+"</font> 一伙锅去！");
+        	/*
         	$.ajax({
         	   	dataType : "jsonp",
         	       url: "http://yuntuapi.amap.com/datasearch/id?tableid=55656259e4b0ccb608f13383&_id="+data.inviteAddress+"&key=a46ffb73729bb688480643eea31387e7",
@@ -434,6 +440,8 @@ function initSignUp()
         	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
         		       }
         		     });
+        		     */
+        	
         }
     }); 
 	//初始化报名单
@@ -444,7 +452,8 @@ function initSignUp()
         	var signUserList="";
         	$(data).each(function(i,val){
         		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
-        		signUserList +="&nbsp;&nbsp;<font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
+        		alert(val.weixinUser.headImgUrl);
+        		signUserList +="&nbsp;&nbsp;<img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
         	});
         	$("#signUserList").html(signUserList);
         }
@@ -471,7 +480,7 @@ function initSignUp()
 	        	        	var signUserList="";
 	        	        	$(data).each(function(i,val){
 	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
-	        	        		signUserList +="&nbsp;&nbsp;<font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
+	        	        		signUserList +="&nbsp;&nbsp;<img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
 	        	        	});
 	        	        	$("#signUserList").html(signUserList);
 	        	        }
@@ -512,7 +521,7 @@ function initSignUp()
 	        	        success: function (data) {
 	        	        	$(data).each(function(i,val){
 	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
-	        	        		signUserList +="&nbsp;&nbsp;<font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
+	        	        		signUserList +="&nbsp;&nbsp;<img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
 	        	        	});
 	        	        	
 	        	        	$("#signUserList").html(signUserList);
@@ -548,10 +557,11 @@ function initRInviteInfoList()
 	wx.hideOptionMenu();
 	var rInviteInfoList="";
 	$.ajax({
+		async:false,
         url: "getRInviteInfo.action?rd="+Math.random(),
         success: function (data) {
         	$(data).each(function(i,val){
-        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage('inviteId',"+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>"
+        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>"
         	});
         	
         	$("#rInviteInfoList").html(rInviteInfoList);
@@ -569,7 +579,7 @@ function initSInviteInfoList()
         url: "getSInviteInfo.action?rd="+Math.random(),
         success: function (data) {
         	$(data).each(function(i,val){
-        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage('inviteId',"+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>"
+        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>"
         	});
         	$("#sInviteInfoList").html(sInviteInfoList);
         }
