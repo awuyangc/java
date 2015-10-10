@@ -444,18 +444,64 @@ function initSignUp()
         	
         }
     }); 
+	
+	
 	//初始化报名单
 	$.ajax({
         url: "getJoinInfo.action?rd="+Math.random(),
         data:{"inviteId":inviteId},
         success: function (data) {
         	var signUserList="";
+        	var inviteAddress="";
         	$(data).each(function(i,val){
         		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
-        		alert(val.weixinUser.headImgUrl);
-        		signUserList +="&nbsp;&nbsp;<img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
-        	});
+        		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
+        		inviteAddress=val.inviteInfo.inviteAddress;
+        	}); 
+        	signUserList +="<div class='sign'><img class='joinImg' src='img/add.jpg'></div>";
+        	//显示已报名的人员
         	$("#signUserList").html(signUserList);
+        	//显示餐厅
+        	if(inviteAddress==""||inviteAddress==null)
+        		{
+        			//给用户推荐餐厅
+        			$("#tjct").html("推荐餐厅");
+        		}
+        	else
+        		{
+        			$("#tjct").html("发起人选中的餐厅");
+	        		 var url="http://api.map.baidu.com/geosearch/v3/detail/"+inviteAddress+"?ak=0XpknrkEnkVWwHCDHeEneVcq&geotable_id=121674";
+	        		 $.ajax({
+	        	 	   	   dataType : "jsonp",
+	        	 	   	   url:url,
+	        	 	       //url: "http://api.map.baidu.com/place/v2/search?ak=0XpknrkEnkVWwHCDHeEneVcq&output=json&query=%E7%81%AB%E9%94%85&page_size=100&page_num=0&scope=2&region=%E6%AD%A6%E6%B1%89",
+	        	 	       success: function (result) {
+	        	 	       	 var listRestaurant=""; 
+	        	 	       	 $(result.contents).each(function(i,val){
+	        	 	       		listRestaurant +='<div class="list-group-item" href="#restaurantDetail"  onclick="setSessionStorage(\'lat\','+val.location[0]+');setSessionStorage(\'lng\','+val.location[1]+');">';
+	        	 	       						//'<a href="'+val.detail_info.detail_url+'">'+
+	        	 	       						//'<a href="http://map.baidu.com/mobile/">'+
+	        	 				if(val.headImgUrl!=undefined)
+	        	 					{
+	        	 						listRestaurant += '<img src="'+val.headImgUrl.big+'">';
+	        	 					}
+	        	 				else
+	        	 					{
+	        	 						listRestaurant += '<img src="img/c/qrcode_for_gh_be461b35d165_344.jpg">';
+	        	 					}
+	        	 	       						
+	        	 				listRestaurant +='<h4>'+val.title+'</h4>'+
+	        	 								 '<p>'+val.address+'</p>'+
+	        	 								 '<div class="clear"></div>'+ 
+	        	 								 '<div><a href="#">为什么选这一家？</a></div>'
+	        	 								 '</div>';
+	        	 								
+	        	 								 
+	        	 	          	  }); 
+	        	 	          	 $("#restaurantInfo").html(listRestaurant);
+	        	 		   }
+	        	 	 });
+        		}
         }
     }); 
 	//我要报名按钮
@@ -480,8 +526,9 @@ function initSignUp()
 	        	        	var signUserList="";
 	        	        	$(data).each(function(i,val){
 	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
-	        	        		signUserList +="&nbsp;&nbsp;<img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
+	        	        		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
 	        	        	});
+	        	        	signUserList +="<div class='sign'><img class='joinImg' src='img/add.jpg'></div>";
 	        	        	$("#signUserList").html(signUserList);
 	        	        }
 	        	    }); 
@@ -521,9 +568,9 @@ function initSignUp()
 	        	        success: function (data) {
 	        	        	$(data).each(function(i,val){
 	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
-	        	        		signUserList +="&nbsp;&nbsp;<img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font>"
+	        	        		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
 	        	        	});
-	        	        	
+	        	        	signUserList +="<div class='sign'><img class='joinImg' src='img/add.jpg'></div>";
 	        	        	$("#signUserList").html(signUserList);
 	        	        }
 	        	    }); 
@@ -561,7 +608,7 @@ function initRInviteInfoList()
         url: "getRInviteInfo.action?rd="+Math.random(),
         success: function (data) {
         	$(data).each(function(i,val){
-        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>"
+        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>";
         	});
         	
         	$("#rInviteInfoList").html(rInviteInfoList);
@@ -579,7 +626,7 @@ function initSInviteInfoList()
         url: "getSInviteInfo.action?rd="+Math.random(),
         success: function (data) {
         	$(data).each(function(i,val){
-        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>"
+        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
         	});
         	$("#sInviteInfoList").html(sInviteInfoList);
         }

@@ -44,3 +44,12 @@ header h1
 	height:40px;
 	width:40px;
 }
+.clear
+{
+	clear:both;
+}
+.sign
+{
+	float:left;
+	padding:5px;
+}
