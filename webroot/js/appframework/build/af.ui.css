@@ -1798,13 +1798,14 @@ body #af_actionsheet a {
   text-shadow: none;
 }
 .view header {
-  background: #0088d1;
+  background: #ff873B;
   border: none;
-  border-bottom: 1px solid #0088d1;
+  border-bottom: 1px solid #ff873B;
   color: #ffffff;
 }
 .view header h1 {
   text-shadow: none;
+  font-weight:normal;
   width: 45%;
 }
 .view header .backButton {
@@ -1833,9 +1834,9 @@ body #af_actionsheet a {
   position: absolute;
 }
 .view footer {
-  background: #0088d1;
-  border: none;
-  border-top: 1px solid #0088d1;
+  background: #f8f8f8;
+  color: black;
+  border-top: 1px solid #c8c7cc;
   box-shadow: none;
 }
 .view footer > a {
@@ -1843,7 +1844,7 @@ body #af_actionsheet a {
 }
 .view footer > a.pressed:not(.button) {
   border-radius: 0;
-  background-color: #00AEEF;
+  background-color: #f8f8f8;
 }
 .view footer > a.icon.pressed:not(.button):before {
   color: inherit;
@@ -1995,12 +1996,12 @@ input[type="checkbox"]:checked + label:before {
   background-color: transparent;
 }
 .button.next::after {
-  color: black;
+  color: white;
   z-index: -1;
   font-size: 22px;
   position: absolute;
-  top: 6px;
-  right: -25px;
+  /*top: 6px;*/
+  right: -20px;
   text-align: center;
   border-radius: 0;
   border: none;
@@ -2268,9 +2269,11 @@ input[type="checkbox"]:checked + label:before {
   border-color: #666 #666 transparent transparent !important;
 }
 .button.next {
-  border-color: #666 transparent #666 #666 !important;
-  margin-right: 16px;
-  padding-right: 6px;
+  border: none;
+  padding-top:6px;
+  background-color:transparent;
+  color:white;
+  display: block;
 }
 .button.previous::after {
   z-index: -1;
@@ -2288,19 +2291,29 @@ input[type="checkbox"]:checked + label:before {
   transform: rotate(45deg);
 }
 .button.next::after {
+   color: white;
   z-index: -1;
-  content: '';
+  font-size: 22px;
   position: absolute;
-  width: 25px;
-  height: 27px;
-  background-color: inherit;
-  top: 3px;
-  right: -11px;
-  border-radius: 5px;
-  border: 1px solid;
-  border-color: transparent transparent transparent transparent;
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
+  /*top: 6px;*/
+  right: -20px;
+  text-align: center;
+  border-radius: 0;
+  border: none;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-transform: none;
+  transform: none;
+  font-family: 'chevron';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  content: "\f054";
+  background-color: transparent;
 }
 .button.block {
   display: block;
@@ -3296,7 +3309,7 @@ li .icon:before {
   font-weight: normal;
 }
 .ios7 .list li {
-  margin-left: 10px;
+  margin-left: 0px;
 }
 .ios7 .list > li > a:after {
   color: #d9d9d9;
@@ -3615,7 +3628,7 @@ li .icon:before {
   padding: 0px;
   list-style: none;
   background-color: #fff;
-  margin: 0 -10px;
+  margin: 0;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
@@ -3768,11 +3781,12 @@ p {
   left: 27.5%;
   color: #ffffff;
   padding: 10px 0;
-  text-shadow: rgba(0, 0, 0, 0.8) 0 -1px 0;
+  /*text-shadow: rgba(0, 0, 0, 0.8) 0 -1px 0;*/
   text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  font-weight:normal;
 }
 .view footer {
   z-index: 180;
@@ -3796,7 +3810,7 @@ p {
   font-size: 12px;
   font-weight: normal;
   text-decoration: none;
-  color: #ffffff;
+  color: #ff873B;
   text-align: center;
   -webkit-box-flex: 1;
   -moz-box-flex: 1;

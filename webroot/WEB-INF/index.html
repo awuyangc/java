@@ -64,7 +64,8 @@
 <script src="js/mobiscroll/js/mobiscroll.select.js"></script>
 <script src="js/mobiscroll/js/mobiscroll.frame.android-holo.js"></script>
 <script src="js/mobiscroll/js/i18n/mobiscroll.i18n.zh.js"></script>
-<script src="js/iscroll5/iscroll.js"></script>
+<!--<script src="js/iscroll5/iscroll.js"></script>-->
+<script src="js/ftscroller/ftscroller.js"></script>
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/index.js"></script>
 
@@ -136,7 +137,7 @@
 
 </head>
 <body>
-	<div id="afui" class="ios7">
+	<div id="afui">
 
 		<div id="splashscreen" class="ui-loader heavy">
 			<div style="height:100px">
@@ -209,21 +210,19 @@
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>我报名的邀请</h1>
 					</header>
-					<div class="content">
+					<div>
 						<ul class="list" id="rInviteInfoList"></ul>
 					</div>
 				</div>
 
 				<div class="panel" data-title="我发出的邀请" id="sInviteInfo"
-					data-load='initSInviteInfoList' style="overflow-y: hidden;">
+					data-load='initSInviteInfoList'>
 					<header>
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>我发出的邀请</h1>
 					</header>
-					<div class="content">
-						<div class="wrapper">
-								<ul class="list" id="sInviteInfoList"></ul>
-						</div>
+					<div>
+						<ul class="list" id="sInviteInfoList"></ul>
 					</div>
 				</div>
 
@@ -380,5 +379,6 @@
 	<div>
 		<input type="hidden" value="" id="nickname" />
 	</div>
+	<span id="ajaxLoadImg" class="ui-icon ui-icon-loading spin"></span>
 </body>
 </html>

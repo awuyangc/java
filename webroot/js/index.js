@@ -603,6 +603,7 @@ function initRInviteInfoList()
 {
 	wx.hideOptionMenu();
 	var rInviteInfoList="";
+	 var page_num=10;
 	$.ajax({
 		async:false,
         url: "getRInviteInfo.action?rd="+Math.random(),
@@ -614,6 +615,25 @@ function initRInviteInfoList()
         	$("#rInviteInfoList").html(rInviteInfoList);
         }
     });
+	
+	$(window).scroll(function(){
+		alert();
+        if($(document).scrollTop()>=$(document).height()-$(window).height()){
+          var div1tem = $('#rInviteInfo').height()
+          var str =''
+          $.ajax({
+              url:"getRInviteInfo.action?rd="+Math.random(),
+              beforeSend:function(){
+                $('.ajaxLoadImg').show() //显示加载时候的提示
+              },
+              success:function(ret){
+               $("#rInviteInfoList").append(ret) //将ajxa请求的数据追加到内容里面
+               $('.ajaxLoadImg').hide() //请求成功,隐藏加载提示
+              }
+          })
+        }
+      });
+      
 }
 
 //我发出的邀请
@@ -631,9 +651,6 @@ function initSInviteInfoList()
         	$("#sInviteInfoList").html(sInviteInfoList);
         }
     });
-	//加载iscroll
-	var myScroll = new IScroll('.wrapper');
-	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 }
 
 function dispatchPanelEvent(fnc,myPanel){
