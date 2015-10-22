@@ -23,8 +23,8 @@
 <script
 	src="http://webapi.amap.com/maps?v=1.3&key=7100b5a1f92e0ebf989574284fd2c756"></script>
 <script src="http://api.map.baidu.com/api?v=2.0&ak=0XpknrkEnkVWwHCDHeEneVcq"></script>
-	
-<script src="js/weixin/jweixin-1.0.0.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<!-- <script src="js/weixin/jweixin-1.0.0.js"></script> -->
 
 <!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet"
@@ -205,23 +205,23 @@
 				</div>
 				
 				<div class="panel" data-title="我报名的邀请" id="rInviteInfo"
-					data-load='initRInviteInfoList'>
+					data-load='initRInviteInfoList' style="overflow-y:hidden">
 					<header>
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>我报名的邀请</h1>
 					</header>
-					<div>
+					<div style="height:100%;overflow-y:auto">
 						<ul class="list" id="rInviteInfoList"></ul>
 					</div>
 				</div>
 
 				<div class="panel" data-title="我发出的邀请" id="sInviteInfo"
-					data-load='initSInviteInfoList'>
+					data-load='initSInviteInfoList' style="overflow-y:hidden">
 					<header>
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>我发出的邀请</h1>
 					</header>
-					<div>
+					<div style="height:100%;overflow-y:auto">
 						<ul class="list" id="sInviteInfoList"></ul>
 					</div>
 				</div>

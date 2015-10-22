@@ -131,7 +131,7 @@ function initInvite()
  
 //日期变动时触发
 function mobiscroll_change(valueText,inst){
-	alert(valueText);
+	
 	$("#invite-end").val();
 }
 
@@ -357,36 +357,12 @@ function initConfirmInvite()
         }
     });  
 	
-	wx.onMenuShareAppMessage({
-	    title: '一伙锅', // 分享标题
-	    desc: '您的好友 '+nickname+' 邀请您参加一伙锅！', // 分享描述
-	    link: 'http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+$("#inviteId").val(), // 分享链接
-	    imgUrl: 'http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg', // 分享图标
-	    type: '', // 分享类型,music、video或link，不填默认为link
-	    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-	    success: function () { 
-	        // 用户确认分享后执行的回调函数
-	    },
-	    cancel: function () { 
-	        // 用户取消分享后执行的回调函数
-	    }
-	});
-	
-	//分享到朋友圈
-	wx.onMenuShareTimeline({
-	    title: '一伙锅', // 分享标题
-	    desc: '您的好友'+nickname+'邀请您参加一伙锅吧！', // 分享描述
-	    link: 'http://awuyangc.xicp.net/origin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId, // 分享链接
-	    imgUrl: 'http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg', // 分享图标
-	    success: function () { 
-	        // 用户确认分享后执行的回调函数
-	    },
-	    cancel: function () { 
-	        // 用户取消分享后执行的回调函数
-	    }
-	});
-	
-
+	var title='一伙锅';
+	var desc='您的好友 '+nickname+' 邀请您参加一伙锅！';
+	var link='http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+$("#inviteId").val(); // 分享链接
+	var imgUrl='http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg'; // 分享图标
+	onMenuShareAppMessage(title,desc,link,imgUrl);
+	wx.onMenuShareTimeline(title,desc,link,imgUrl);
 }
 
 //分享邀请单
@@ -408,6 +384,7 @@ function initSignUp()
 {
 	
 	var inviteId=sessionStorage.getItem("inviteId");
+	var ownFlag=sessionStorage.getItem("ownFlag");
 	if(inviteId!=null&&inviteId!="")
 	{
 		sessionStorage.setItem("inviteId",inviteId);
@@ -421,9 +398,9 @@ function initSignUp()
         data:{"inviteId":inviteId},
         success: function (data) {
         	$("#inviteSignInfo").html("您的好友  \"<font color='red'>"+data.weixinUser.nickname+"</font>\" 邀请您 <font color='blue'>"+data.inviteDay+"</font> 一伙锅去！");
-        	/*
-        	$.ajax({
-        	   	dataType : "jsonp",
+	        	/*
+	        	$.ajax({
+	        	   	dataType : "jsonp",
         	       url: "http://yuntuapi.amap.com/datasearch/id?tableid=55656259e4b0ccb608f13383&_id="+data.inviteAddress+"&key=a46ffb73729bb688480643eea31387e7",
         	       success: function (result) {
         	       	 var listRestaurant=""; 
@@ -458,7 +435,18 @@ function initSignUp()
         		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
         		inviteAddress=val.inviteInfo.inviteAddress;
         	}); 
-        	signUserList +="<div class='sign'><img class='joinImg' src='img/add.jpg'></div>";
+        	//如果自己为发起者
+        	if(ownFlag==1)
+        	{
+        		var title='一伙锅';
+        		var desc='您发起的一伙锅邀请！';
+        		var link='http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId; // 分享链接
+        		var imgUrl='http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg'; // 分享图标
+        		onMenuShareAppMessage(title,desc,link,imgUrl);
+        		onMenuShareTimeline(title,desc,link,imgUrl);
+        		signUserList +="<div class='sign'><a href='#' onclick=''><img class='joinImg' src='img/add.jpg'></a></div>";
+        	}
+        	
         	//显示已报名的人员
         	$("#signUserList").html(signUserList);
         	//显示餐厅
@@ -594,6 +582,7 @@ function initSignUp()
 function unloadSignUp()
 {
 	sessionStorage.setItem("inviteId",null);
+	sessionStorage.setItem("ownFlag",null);
 	$("#signUserList").empty();
 	
 }
@@ -646,7 +635,7 @@ function initSInviteInfoList()
         url: "getSInviteInfo.action?rd="+Math.random(),
         success: function (data) {
         	$(data).each(function(i,val){
-        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+")'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
+        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+");setSessionStorage(\"ownFlag\",1)'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
         	});
         	$("#sInviteInfoList").html(sInviteInfoList);
         }
@@ -710,6 +699,44 @@ function dispatchPanelEvent(fnc,myPanel){
 	        }
 	    });
  }
+ 
+//微信分享
+ function onMenuShareAppMessage(title,desc,link,imgUrl)
+ {
+	 wx.onMenuShareAppMessage({
+		    title: title, // 分享标题
+		    desc: desc, // 分享描述
+		    link: link, // 分享链接
+		    imgUrl: imgUrl, // 分享图标
+		    type: '', // 分享类型,music、video或link，不填默认为link
+		    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+		    success: function () { 
+		        // 用户确认分享后执行的回调函数
+		    },
+		    cancel: function () { 
+		        // 用户取消分享后执行的回调函数
+		    }
+		});
+ }
+function onMenuShareTimeline(title,desc,link,imgUrl)
+{
+	 wx.onMenuShareAppMessage({
+		    title: title, // 分享标题
+		    desc: desc, // 分享描述
+		    link: link, // 分享链接
+		    imgUrl: imgUrl, // 分享图标
+		    type: '', // 分享类型,music、video或link，不填默认为link
+		    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+		    success: function () { 
+		        // 用户确认分享后执行的回调函数
+		    },
+		    cancel: function () { 
+		        // 用户取消分享后执行的回调函数
+		    }
+		});
+ 
+}
+ 
  
  //爬取百度poi
  function getBaiduPoi()
