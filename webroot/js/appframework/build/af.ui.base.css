@@ -1712,8 +1712,8 @@ input[type="checkbox"]:checked + label:before {
   padding-top: 80px !important;
 }
 .ui-icon {
-  background: #eeeeee;
-  
+  background: #666;
+  background: rgba(0, 0, 0, 0.4);
   background-repeat: no-repeat;
 }
 .ui-loader {

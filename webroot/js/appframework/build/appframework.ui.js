@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-07-13 */
+/*! intel-appframework - v3.0.0 - 2015-10-20 */
 
 /**
  * af.shim.js
@@ -405,7 +405,7 @@ window.af=window.jq=jQuery;
                     $el.addClass("win8");
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $el.addClass("bb");
-                    that.backButtonText = "返回";
+                    that.backButtonText = "Back";
                 } else if ($.os.ios7){
                     $el.addClass("ios7");
                 } else if ($.os.ios)
@@ -428,6 +428,7 @@ window.af=window.jq=jQuery;
     AFUi.prototype = {
         init:false,
         showLoading: true,
+        showingMask: false,
         loadingText: "Loading Content",
         remotePages: {},
         history: [],
@@ -914,6 +915,15 @@ window.af=window.jq=jQuery;
             if (!text) text = this.loadingText || "";
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
+            this.showingMask = true;
+
+            var self = this;
+            //set another timeout to auto-hide the mask if something goes wrong after 15 secs
+            setTimeout(function() {
+                 if(self.showingMask) {
+                    self.hideMask();
+                 }
+            }, 15000);
         },
         /**
          * Hide the loading mask
@@ -924,6 +934,7 @@ window.af=window.jq=jQuery;
          */
         hideMask: function() {
             $.query("#afui_mask").hide();
+            this.showingMask = false;
         },
         /**
          * @api private
@@ -1142,7 +1153,7 @@ window.af=window.jq=jQuery;
             if(items>=2&&isNewView!==true){
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
-                hdr.prepend("<a class='backButton back'>返回</a>");
+                hdr.prepend("<a class='backButton back'>Back</a>");
             }
             else {
                 hdr.find(".backButton").remove();
