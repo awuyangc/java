@@ -189,22 +189,25 @@ function initRestaurant()
  	       success: function (result) {
  	       	 var listRestaurant=""; 
  	       	 $(result.contents).each(function(i,val){
- 	       		listRestaurant +="<a class='list-group-item' href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");'>";
+ 	       		if(val.headImgUrl!=undefined)
+					{
+						headUrl= '<img src="'+val.headImgUrl.big+'">';
+						listRestaurant +="<a class='list-group-item' href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\""+val.headImgUrl.big+"\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
+					}
+				else
+					{
+						headUrl= '<img src="img/c/qrcode_for_gh_be461b35d165_344.jpg">';
+						listRestaurant +="<a class='list-group-item' href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\"img/c/qrcode_for_gh_be461b35d165_344.jpg\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
+					}
+ 	       		
  	       						//'<a href="'+val.detail_info.detail_url+'">'+
  	       						//'<a href="http://map.baidu.com/mobile/">'+
- 				if(val.headImgUrl!=undefined)
- 					{
- 						listRestaurant += '<img src="'+val.headImgUrl.big+'">';
- 					}
- 				else
- 					{
- 						listRestaurant += '<img src="img/c/qrcode_for_gh_be461b35d165_344.jpg">';
- 					}
- 	       						
+ 	       	    listRestaurant +=headUrl;		
  				listRestaurant +='<h4>'+val.title+'</h4>'+
  								 '<p>'+val.address+'</p>'+
  								 '</a>';
- 	          	  }); 
+ 	          	  });
+ 	       	 	
  	          	 $("#listRestaurant").html(listRestaurant);
  		   }
  	 });
@@ -284,25 +287,28 @@ function initRrestaurantDetail()
 	}
 	*/ 
 	 var width=$(document).width();
-	 var height=$(document).height();
+	 var height=$(window).height();
 	 $("#mapContainer").css("height",height)
+	 var uid=sessionStorage.getItem("uid");
 	 var lat=sessionStorage.getItem("lat");
 	 var lng=sessionStorage.getItem("lng");
+	 var title=sessionStorage.getItem("title");
+	 var address=sessionStorage.getItem("address");
+	 var headImgUrl=sessionStorage.getItem("headImgUrl");
 	 //var map = new BMap.Map("mapContainer"); 
 	// 百度地图API功能
 	    var map = new BMap.Map('mapContainer');
 	    var poi = new BMap.Point(lat,lng);
-	    map.centerAndZoom(poi, 16);
+	    map.centerAndZoom(poi, 20);
 	    map.enableScrollWheelZoom();
 	    var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
-	                    '<img src="../img/baidu.jpg" alt="" style="float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;"/>' +
-	                    '地址：北京市海淀区上地十街10号<br/>电话：(010)59928888<br/>简介：百度大厦位于北京市海淀区西二旗地铁站附近，为百度公司综合研发及办公总部。' +
+	                    '<img src="'+headImgUrl+'" alt="" style="float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;"/>' +address+
 	                  '</div>';
 
 	    //创建检索信息窗口对象
 	    var searchInfoWindow = null;
 		searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
-				title  : "百度大厦",      //标题
+				title  : title,      //标题
 				width  : width-80,             //宽度
 				enableSendToPhone:false,
 				panel  : "panel",         //检索结果面板
@@ -321,9 +327,10 @@ function initRrestaurantDetail()
 	    })
 	   //$(".BMapLib_sendToPhone").css("display","none")
 	    map.addOverlay(marker); //在地图中添加marker
-	    //特定css设置，防止冲突
 	    
-		//样式1
+	   $("#btnChooseRestaurant").unbind().click(function(){
+		   $('#restaurantId').val(uid);
+	   });
 	
 }
 
@@ -421,58 +428,9 @@ function initSignUp()
         url: "getInviteInfo.action",
         data:{"inviteId":inviteId},
         success: function (data) {
+        	//初始化推荐餐厅
         	$("#inviteSignInfo").html("您的好友  \"<font color='red'>"+data.weixinUser.nickname+"</font>\" 邀请您 <font color='blue'>"+data.inviteDay+"</font> 一伙锅去！");
-	        	/*
-	        	$.ajax({
-	        	   	dataType : "jsonp",
-        	       url: "http://yuntuapi.amap.com/datasearch/id?tableid=55656259e4b0ccb608f13383&_id="+data.inviteAddress+"&key=a46ffb73729bb688480643eea31387e7",
-        	       success: function (result) {
-        	       	 var listRestaurant=""; 
-        	       	 $(result.datas).each(function(i,val){
-        	       		listRestaurant +='<li id="li'+val._id+'">'+
-        					 			 //'<a href="#restaurantDetail" onclick="$(\'#restaurantId\').val('+val._id+');$(\'#restaurantName\').val(\''+val._name+'\')">'+
-        								 '<img src="'+val._image[0]._url+'">'+
-        								 '<h2>'+val._name+'</h2>'+
-        								 '<p>'+val._address+'</p>'+
-        								 '</a>'+
-        								 '</li>';
-        	          	  })  
-        	          	 $("#restaurantInfo").html(listRestaurant);
-        	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
-        		       }
-        		     });
-        		     */
-        	
-        }
-    }); 
-	
-	
-	//初始化报名单
-	$.ajax({
-        url: "getJoinInfo.action?rd="+Math.random(),
-        data:{"inviteId":inviteId},
-        success: function (data) {
-        	var signUserList="";
-        	var inviteAddress="";
-        	$(data).each(function(i,val){
-        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
-        		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
-        		inviteAddress=val.inviteInfo.inviteAddress;
-        	}); 
-        	//如果自己为发起者
-        	if(ownFlag==1)
-        	{
-        		var title='一伙锅';
-        		var desc='您发起的一伙锅邀请！';
-        		var link='http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId; // 分享链接
-        		var imgUrl='http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg'; // 分享图标
-        		onMenuShareAppMessage(title,desc,link,imgUrl);
-        		onMenuShareTimeline(title,desc,link,imgUrl);
-        		signUserList +="<div class='sign'><a href='#' onclick=''><img class='joinImg' src='img/add.jpg'></a></div>";
-        	}
-        	
-        	//显示已报名的人员
-        	$("#signUserList").html(signUserList);
+        	var	inviteAddress=data.inviteAddress;
         	//显示餐厅
         	if(inviteAddress==""||inviteAddress==null)
         		{
@@ -514,6 +472,35 @@ function initSignUp()
 	        	 		   }
 	        	 	 });
         		}
+        	
+        }
+    }); 
+
+	//初始化报名单
+	$.ajax({
+        url: "getJoinInfo.action?rd="+Math.random(),
+        data:{"inviteId":inviteId},
+        success: function (data) {
+        	var signUserList="";
+        	var inviteAddress="";
+        	$(data).each(function(i,val){
+        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
+        		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
+        	}); 
+        	//如果自己为发起者
+        	if(ownFlag==1)
+        	{
+        		var title='一伙锅';
+        		var desc='您发起的一伙锅邀请！';
+        		var link='http://awuyangc.xicp.net/origin/weixin/oauth2Check.action?rn='+Math.random()+'&inviteId='+inviteId; // 分享链接
+        		var imgUrl='http://awuyangc.xicp.net/origin/img/c/qrcode_for_gh_be461b35d165_258.jpg'; // 分享图标
+        		onMenuShareAppMessage(title,desc,link,imgUrl);
+        		onMenuShareTimeline(title,desc,link,imgUrl);
+        		signUserList +="<div class='sign'><a href='#' onclick=''><img class='joinImg' src='img/add.jpg'></a></div>";
+        	}
+        	
+        	//显示已报名的人员
+        	$("#signUserList").html(signUserList);
         }
     }); 
 	//我要报名按钮
@@ -540,7 +527,10 @@ function initSignUp()
 	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
 	        	        		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
 	        	        	});
+	        	        	if(ownFlag==1)
+	        	        	{
 	        	        	signUserList +="<div class='sign'><img class='joinImg' src='img/add.jpg'></div>";
+	        	        	}
 	        	        	$("#signUserList").html(signUserList);
 	        	        }
 	        	    }); 
@@ -582,7 +572,10 @@ function initSignUp()
 	        	        		var color="#00000"+(Math.random()*0x1000000<<0).toString(16).slice(-6);
 	        	        		signUserList +="<div class='sign'><img class='joinImg' src='"+val.weixinUser.headImgUrl+"'><br><font style='border-style: solid;border-width:1px;border-color:"+color+"' color='"+color+"'>"+val.weixinUser.nickname+"</font></div>";
 	        	        	});
+	        	        	if(ownFlag==1)
+	        	        	{
 	        	        	signUserList +="<div class='sign'><img class='joinImg' src='img/add.jpg'></div>";
+	        	        	}
 	        	        	$("#signUserList").html(signUserList);
 	        	        }
 	        	    }); 
@@ -630,7 +623,6 @@ function initRInviteInfoList()
     });
 	
 	$(window).scroll(function(){
-		alert();
         if($(document).scrollTop()>=$(document).height()-$(window).height()){
           var div1tem = $('#rInviteInfo').height()
           var str =''
@@ -785,7 +777,6 @@ function onMenuShareTimeline(title,desc,link,imgUrl)
 	        		var headImgUrl="";
 	        		csv +=title+","+address+","+longitude+","+latitude+","+"1,"+","+", \r\n";
 	        	});
-	        	alert(csv);
 	        }
 	    });
  }
