@@ -71,8 +71,13 @@
                 id = "#" + that.firstPanel.id;
             if (id === "") return;
             if ($(id).filter(".panel").length === 0) return;
-
-            if (id !== "#" + that.activeDiv.id) that.goBack();
+            if (id !== "#" + that.activeDiv.id) {
+                //Make a custom event object for goBack
+                var evt = {
+                    "target" : $(id)
+                };
+                that.goBack(evt);
+            }
 
         }, false);
 
@@ -135,6 +140,7 @@
         overlayStatusbar: false,
         useAutoPressed: true,
         useInternalRouting:true,
+        backButtonText: "Back",
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -375,27 +381,39 @@
          */
         goBack: function(e) {
             //find the view
-            var view=$(this.activeDiv).closest(".view");
-            if(e&&e.target)
-                view=$(e.target).closest(".view");
+            var isSameView = true;
+            var currentView=$(this.activeDiv).closest(".view");
+            var targetView=currentView;
+            if(e&&e.target) {
+                targetView=$(e.target).closest(".view");
+                isSameView = targetView.prop("id") === (currentView.prop("id"));
+            }
 
-            if(view.length===0) return;
+            if(targetView.length===0) return;
 
             //history entry
-            if(!this.views[view.prop("id")]) return;
-            var hist=this.views[view.prop("id")];
+            if(!this.views[targetView.prop("id")]) return;
+            var hist=this.views[targetView.prop("id")];
 
             if(hist.length===0) return;
             var item=hist.pop();
-
+            //If not in same view, just push back to keep last states
+            if (!isSameView) {
+                hist.push(item);
+            }
             if(item.length===0) return;
             if(hist.length>0){
-
-                var toTarget=hist[hist.length-1].target;
-                if(!toTarget||item.target===toTarget) return;
-                this.runTransition(item.transition,item.target,toTarget,true);
-                this.loadContentData(toTarget,view,true);
-
+                var toTarget = hist[hist.length-1].target;
+                if(!toTarget) return;
+                if(isSameView && (item.target===toTarget)) return;
+                if (!isSameView) {
+                    this.clearHistory(); //Clear current view history
+                    this.runViewTransition(this.transitionType, targetView, currentView, item.target, true);
+                }
+                else {
+                    this.runTransition(item.transition, item.target, toTarget, true);
+                }
+                this.loadContentData(toTarget, targetView, true);
                 this.updateHash(toTarget.id);
             }
             else {
@@ -608,9 +626,9 @@
             var self = this;
             //set another timeout to auto-hide the mask if something goes wrong after 15 secs
             setTimeout(function() {
-                 if(self.showingMask) {
+                if(self.showingMask) {
                     self.hideMask();
-                 }
+                }
             }, 15000);
         },
         /**
@@ -841,7 +859,7 @@
             if(items>=2&&isNewView!==true){
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
-                hdr.prepend("<a class='backButton back'>Back</a>");
+                hdr.prepend("<a class='backButton back'>" + this.backButtonText + "</a>");
             }
             else {
                 hdr.find(".backButton").remove();
@@ -932,59 +950,76 @@
                 doPush=true;
             }
 
-
             $(show).css("zIndex","10");
             $(hide).css("zIndex","1");
             $(noTrans).css("zIndex","1").addClass("active");
 
             var from=$(hide).animation().remove(transition+"-in");
+            //Handle animating the reverse when there is one.
+            //In the push case, it's static and needs to stay available until
+            //the other view finishes animation.
             if(!doPush&&from){
-                if(back)
+                if(back) {
                     from.reverse();
+                }
                 from.end(function(){
                     if(!back){
                         this.classList.remove("active");
-                        $(this).trigger("panelunload");
+                        //If 'this' is view, then find active panel and remove active from it
+                        var tmpActive = $(this).find(".active").get(0);
+                        if (undefined !== tmpActive) {
+                            $(tmpActive).trigger("panelunload", [back]);
+                            tmpActive.classList.remove("active");
+                        }
+                        //Below trigger will be called when 'to animation' done
+                        //$(this).trigger("panelunload", [back]);
                     }
                     else{
-
                         this.classList.add("active");
-                        $(this).trigger("panelload");
+                        $(this).trigger("panelload", [back]);
                     }
                     that.doingTransition=false;
                 }).run(transition+"-out");
             }
-            else {
-                if(!back){
-                    $(hide).trigger("panelunload");
-                }
-                else{
-                    $(hide).trigger("panelload");
-                    $(hide).addClass("activeDiv");
-
-                }
-            }
 
             var to=$(show).animation().remove(transition+"-out");
-            if(back)
+            if(back) {
                 to.reverse();
+            }
             to.end(function(){
+
                 that.doingTransition=false;
                 if(!back){
-
                     this.classList.add("active");
-                    $(this).trigger("panelload");
-                    $(noTrans).trigger("panelload");
+                    $(this).trigger("panelload", [back]);
+                    $(noTrans).trigger("panelload", [back]);
+
+                    //Previous panel needs to be hidden after animation
+                    //Fixes #850, #860, #873
+                    var tmpActive = $(hide).find(".active").get(0);
+                    if (undefined !== tmpActive) {
+                        $(tmpActive).trigger("panelunload", [back]);
+                        tmpActive.classList.remove("active");
+
+                    }
+                    $(hide).trigger("panelunload", [back]);
                 }
                 else{
                     if(noTrans){
                         $(noTrans).css("zIndex","10");
-
                     }
-
                     this.classList.remove("active");
-                    $(this).trigger("panelunload");
+                    //If 'hide' is view, then find active panel and remove active from it
+                    var tmpActive = $(this).find(".active").get(0);
+                    if (undefined !== tmpActive) {
+                        $(tmpActive).trigger("panelunload", [back]);
+                        tmpActive.classList.remove("active");
+                    }
+                    $(hide).trigger("panelload", [back]);
+                    $(hide).addClass("active");
+                    $(this).trigger("panelunload", [back]);
                 }
+
             }).run(transition+"-in");
         },
 
@@ -1000,7 +1035,6 @@
             //find the active
 
             view.addClass("active");
-            //view.find(".panel").removeClass("active");
             $(newDiv).addClass("active");
 
             if(transition==="none"){

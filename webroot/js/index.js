@@ -654,6 +654,27 @@ function initSInviteInfoList()
         		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+");setSessionStorage(\"ownFlag\",1)'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
         	});
         	$("#sInviteInfoList").html(sInviteInfoList);
+        	 var w = $(window).width();
+             $("ul>li").css("width", w);
+             //var count = $("ul>li").length;
+             //$("#scroller1").css("width", w * count);
+             var myScroll = new IScroll('#wrapper1', {scrollX: true, scrollY: true, mouseWheel: true, snap: true });
+             /*myScroll.on('scrollEnd', function () {
+                 count = $("ul>li").length;
+                 if (Math.abs(this.x) >= w * (count - 1)) {
+                     // do something
+                     for (var i = 0; i < 10; i++) {
+                         $("ul").append("<li>Cell " + (count+1 + i) + "</li>");
+                     }
+                     count = $("ul>li").length;
+                     $("#scroller1").css("width", w * count);
+                     $("ul>li").css("width", w);
+                     setTimeout(function () {                      
+                         myScroll.refresh();
+                         myScroll.options.snap = true;
+                     }, 10);
+                 }
+             });*/
         }
     });
 }
