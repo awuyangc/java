@@ -1,8 +1,12 @@
 package com.wy.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
 import com.wy.dao.InviteInfoMapper;
 import com.wy.model.InviteInfo;
 import com.wy.service.IInviteInfoService;
@@ -44,9 +48,9 @@ public class InviteInfoServiceImpl implements IInviteInfoService {
 	}
 
 	@Override
-	public List<InviteInfo> getMyInviteInfoList(String openId) {
+	public List<InviteInfo> getMyInviteInfoList(Map map) {
 		// TODO Auto-generated method stub
-		return inviteInfoMapper.getMyInviteInfo(openId);
+		return inviteInfoMapper.getMyInviteInfo(map);
 	}
 
 }

@@ -354,21 +354,21 @@ function initConfirmInvite()
 	//$("#inviteInfo").html("<font>您的邀请单详细信息如下：<br>日期："+inviteDay+"<br>时间段："+inviteBegin+" 到 "+inviteEnd+"<br></font>");
 	
 	$("#btnshare").unbind().click(function(){
-		  var w=document.documentElement.scrollWidth;
-		  var h=document.documentElement.scrollHeight;
-		  var bw=document.documentElement.clientWidth;
-		  var bh=document.documentElement.clientHeight;
-		  var x=document.documentElement.scrollLeft?document.documentElement.scrollLeft:document.body.scrollLeft;
-		  var y=document.documentElement.scrollTop?document.documentElement.scrollTop:document.body.scrollTop;
-		  $("#cover").css("display","block");
-		  $("#cover").css("width",(bw>w?bw:w)+"px");
-		  $("#cover").css("height",(bh>h?bh:h)+"px");
-	      $("#guide").css("display","block");
-	      $("#guide").css("top",(y+5)+"px");
-		  $("#cover").unbind().click(function(){
-			 $("#cover").css("display","none");
-	         $("#guide").css("display","none");
-		  });
+	  var w=document.documentElement.scrollWidth;
+	  var h=document.documentElement.scrollHeight;
+	  var bw=document.documentElement.clientWidth;
+	  var bh=document.documentElement.clientHeight;
+	  var x=document.documentElement.scrollLeft?document.documentElement.scrollLeft:document.body.scrollLeft;
+	  var y=document.documentElement.scrollTop?document.documentElement.scrollTop:document.body.scrollTop;
+	  $("#cover").css("display","block");
+	  $("#cover").css("width",(bw>w?bw:w)+"px");
+	  $("#cover").css("height",(bh>h?bh:h)+"px");
+      $("#guide").css("display","block");
+      $("#guide").css("top",(y+5)+"px");
+	  $("#cover").unbind().click(function(){
+		 $("#cover").css("display","none");
+         $("#guide").css("display","none");
+	  });
 	});
 	
 	$.ajax({
@@ -644,11 +644,14 @@ function initRInviteInfoList()
 //我发出的邀请
 function initSInviteInfoList()
 {
+	var currentIndex=0;
+	var maxCount=15;
 	wx.hideOptionMenu();
 	var sInviteInfoList="";
 	$.ajax({
 		async:false,
         url: "getSInviteInfo.action?rd="+Math.random(),
+        data:{"startIndex":currentIndex,"endIndex":maxCount},
         success: function (data) {
         	$(data).each(function(i,val){
         		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+");setSessionStorage(\"ownFlag\",1)'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
@@ -658,9 +661,42 @@ function initSInviteInfoList()
              $("ul>li").css("width", w);
              //var count = $("ul>li").length;
              //$("#scroller1").css("width", w * count);
-             var myScroll = new IScroll('#wrapper1', {scrollX: true, scrollY: true, mouseWheel: true, snap: true });
-             /*myScroll.on('scrollEnd', function () {
-                 count = $("ul>li").length;
+             var myScroll = new IScroll('#wrapper1', {scrollX: true, scrollY: true, mouseWheel: true });
+             /*
+             myScroll.on('scroll', function() {
+            	 alert(this.maxScrollY);
+            	 if (this.y < (this.maxScrollY - maxCount)) {
+            		 pullUpEl.className = pullUpEl['class'];
+                     pullUpEl.style.display = '';
+                     myScroll.refresh();
+                     pullUpEl.className += 'flip';
+                     pullUpL.innerHTML = '准备刷新...';
+            	 }
+             });
+             */
+             $("#pullUpLabel").html("上拉显示更多...");
+             myScroll.on('scrollEnd', function () {
+            	 sInviteInfoList="";
+            	 
+            	 if(Math.abs(this.y)>=Math.abs(this.maxScrollY))
+            		 {
+            		 	currentIndex=currentIndex+maxCount;
+            		 	$.ajax({
+            				async:false,
+            		        url: "getSInviteInfo.action?rd="+Math.random(),
+            		        data:{"startIndex":currentIndex,"endIndex":maxCount},
+            		        success: function (data) {
+            		        	$(data).each(function(i,val){
+            		        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+");setSessionStorage(\"ownFlag\",1)'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
+            		        	});
+            		        	$("#sInviteInfoList").append(sInviteInfoList);
+            		        	$("ul>li").css("width", w);
+            		        	myScroll.refresh();
+            		        }
+            		 	});
+            		 }
+                 /*
+            	 count = $("ul>li").length;
                  if (Math.abs(this.x) >= w * (count - 1)) {
                      // do something
                      for (var i = 0; i < 10; i++) {
@@ -673,8 +709,8 @@ function initSInviteInfoList()
                          myScroll.refresh();
                          myScroll.options.snap = true;
                      }, 10);
-                 }
-             });*/
+                 }*/
+             });
         }
     });
 }

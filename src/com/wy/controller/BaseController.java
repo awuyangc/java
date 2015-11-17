@@ -5,6 +5,7 @@ package com.wy.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -174,11 +175,15 @@ public class BaseController {
 	
 	@RequestMapping("/getSInviteInfo")
 	@ResponseBody
-	public List<InviteInfo> getSInviteInfo(HttpSession session){
+	public List<InviteInfo> getSInviteInfo(HttpSession session,String startIndex,String endIndex){
+		Map map=new HashMap();
 		SNSUserInfo snsUserInfo=(SNSUserInfo) session.getAttribute("snsUserInfo");
 		if(snsUserInfo!=null)
 		{
-		List<InviteInfo> inviteInfo=inviteInfoService.getMyInviteInfoList(snsUserInfo.getOpenId());
+		map.put("openId",snsUserInfo.getOpenId());
+		map.put("startIndex", startIndex);
+		map.put("endIndex", endIndex);
+		List<InviteInfo> inviteInfo=inviteInfoService.getMyInviteInfoList(map);
 		return inviteInfo;
 		}
 		else

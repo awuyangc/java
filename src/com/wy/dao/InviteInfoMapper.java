@@ -1,7 +1,9 @@
 package com.wy.dao;
 
 import com.wy.model.InviteInfo;
+
 import java.util.List;
+import java.util.Map;
 
 public interface InviteInfoMapper {
     /**
@@ -44,5 +46,5 @@ public interface InviteInfoMapper {
      */
     int updateByPrimaryKey(InviteInfo record);
     
-    List<InviteInfo> getMyInviteInfo(String openId);
+    List<InviteInfo> getMyInviteInfo(Map map);
 }
