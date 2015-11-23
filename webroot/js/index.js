@@ -99,6 +99,7 @@
 function initInvite()
 {
 	//wx.hideOptionMenu();
+	//alert();
 	$("#invite-day").mobiscroll().date({mode:'scroller', lang:'zh', theme: 'mobiscroll', display: 'modal',minDate: new Date()});
 	$("#invite-begin").mobiscroll().time();
 	$("#invite-begin").mobiscroll().time({mode:'scroller', lang:'zh', theme: 'mobiscroll', display: 'modal', 
@@ -649,7 +650,6 @@ function initSInviteInfoList()
 	wx.hideOptionMenu();
 	var sInviteInfoList="";
 	$.ajax({
-		async:false,
         url: "getSInviteInfo.action?rd="+Math.random(),
         data:{"startIndex":currentIndex,"endIndex":maxCount},
         success: function (data) {
@@ -658,22 +658,8 @@ function initSInviteInfoList()
         	});
         	$("#sInviteInfoList").html(sInviteInfoList);
         	 var w = $(window).width();
-             $("ul>li").css("width", w);
-             //var count = $("ul>li").length;
-             //$("#scroller1").css("width", w * count);
+             $("#scroller1>ul>li").css("width", w);
              var myScroll = new IScroll('#wrapper1', {scrollX: true, scrollY: true, mouseWheel: true });
-             /*
-             myScroll.on('scroll', function() {
-            	 alert(this.maxScrollY);
-            	 if (this.y < (this.maxScrollY - maxCount)) {
-            		 pullUpEl.className = pullUpEl['class'];
-                     pullUpEl.style.display = '';
-                     myScroll.refresh();
-                     pullUpEl.className += 'flip';
-                     pullUpL.innerHTML = '准备刷新...';
-            	 }
-             });
-             */
              $("#pullUpLabel").html("上拉显示更多...");
              myScroll.on('scrollEnd', function () {
             	 sInviteInfoList="";
@@ -681,35 +667,22 @@ function initSInviteInfoList()
             	 if(Math.abs(this.y)>=Math.abs(this.maxScrollY))
             		 {
             		 	currentIndex=currentIndex+maxCount;
-            		 	$.ajax({
-            				async:false,
-            		        url: "getSInviteInfo.action?rd="+Math.random(),
-            		        data:{"startIndex":currentIndex,"endIndex":maxCount},
-            		        success: function (data) {
-            		        	$(data).each(function(i,val){
-            		        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+");setSessionStorage(\"ownFlag\",1)'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
-            		        	});
-            		        	$("#sInviteInfoList").append(sInviteInfoList);
-            		        	$("ul>li").css("width", w);
-            		        	myScroll.refresh();
-            		        }
-            		 	});
+            		 		$.ajax({
+                		        url: "getSInviteInfo.action?rd="+Math.random(),
+                		        data:{"startIndex":currentIndex,"endIndex":maxCount},
+                		        success: function (data) {
+                		        	$(data).each(function(i,val){
+                		        		sInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.id+");setSessionStorage(\"ownFlag\",1)'>您发起的邀请 时间<font color='blue'>"+val.inviteDay+"</font></a></li>";
+                		        	});
+                		        	$("#sInviteInfoList").append(sInviteInfoList);
+                		        	$("#scroller1>ul>li").css("width", w);
+                		        	setTimeout(function () {                       
+                                        myScroll.refresh();
+                                        myScroll.options.snap = true;
+                                    }, 10);
+                		        }
+                		 	});
             		 }
-                 /*
-            	 count = $("ul>li").length;
-                 if (Math.abs(this.x) >= w * (count - 1)) {
-                     // do something
-                     for (var i = 0; i < 10; i++) {
-                         $("ul").append("<li>Cell " + (count+1 + i) + "</li>");
-                     }
-                     count = $("ul>li").length;
-                     $("#scroller1").css("width", w * count);
-                     $("ul>li").css("width", w);
-                     setTimeout(function () {                      
-                         myScroll.refresh();
-                         myScroll.options.snap = true;
-                     }, 10);
-                 }*/
              });
         }
     });
