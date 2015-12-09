@@ -142,26 +142,6 @@ function mobiscroll_change(valueText,inst){
 function initRestaurant()
 {
 	/*
-	$.ajax({
-	   	dataType : "jsonp",
-	       url: "http://yuntuapi.amap.com/datasearch/local?tableid=55656259e4b0ccb608f13383&city=全国&keywords= &limit=50&page=1&key=a46ffb73729bb688480643eea31387e7",
-	       success: function (result) {
-	       	 var listRestaurant=""; 
-	       	 $(result.datas).each(function(i,val){
-	       		listRestaurant +='<li id="li'+val._id+'">'+
-					 			 '<a href="#restaurantDetail" data-transition="fade" onclick="$(\'#restaurantId\').val('+val._id+');$(\'#restaurantName\').val(\''+val._name+'\')">'+
-								 '<img src="'+val._image[0]._url+'">'+
-								 '<h2>'+val._name+'</h2>'+
-								 '<p>'+val._address+'</p>'+
-								 '</a>'+
-								 '</li>';
-	          	  })  
-	          	 $("#listRestaurant").html(listRestaurant);
-	       	 	 $("#listRestaurant").find("li:last").slideDown(300);
-		       }
-		     });
-		     */
-	/*
 	//微信获得当前地址
 	 var latitude ="30.636295"; // 纬度，浮点数，范围为90 ~ -90
 	 var longitude ="114.176544"; // 经度，浮点数，范围为180 ~ -180。
@@ -180,36 +160,96 @@ function initRestaurant()
 	    } 
 	});
 	*/
+	var currentIndex=0;
+	var maxCount=5;
 	 var latitude ="30.636295"; // 纬度，浮点数，范围为90 ~ -90
 	 var longitude ="114.176544"; // 经度，浮点数，范围为180 ~ -180。
-	 var url="http://api.map.baidu.com/geosearch/v3/nearby?ak=0XpknrkEnkVWwHCDHeEneVcq&geotable_id=121674&location="+longitude+","+latitude+"&q=火锅&radius=100000&page_index=0&page_size=10";
+	 var url="http://api.map.baidu.com/geosearch/v3/nearby?ak=0XpknrkEnkVWwHCDHeEneVcq&geotable_id=121674&location="+longitude+","+latitude+"&q=火锅&radius=100000&page_index="+currentIndex+"&page_size="+maxCount;
 	 $.ajax({
  	   	   dataType : "jsonp",
  	   	   url:url,
- 	       //url: "http://api.map.baidu.com/place/v2/search?ak=0XpknrkEnkVWwHCDHeEneVcq&output=json&query=%E7%81%AB%E9%94%85&page_size=100&page_num=0&scope=2&region=%E6%AD%A6%E6%B1%89",
  	       success: function (result) {
- 	       	 var listRestaurant=""; 
+ 	       	 var listRestaurant="";
+ 	       	 var tempListRestaurant="";
  	       	 $(result.contents).each(function(i,val){
  	       		if(val.headImgUrl!=undefined)
 					{
 						headUrl= '<img src="'+val.headImgUrl.big+'">';
-						listRestaurant +="<a class='list-group-item' href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\""+val.headImgUrl.big+"\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
+						tempListRestaurant="<a href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\""+val.headImgUrl.big+"\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
 					}
 				else
 					{
 						headUrl= '<img src="img/c/qrcode_for_gh_be461b35d165_344.jpg">';
-						listRestaurant +="<a class='list-group-item' href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\"img/c/qrcode_for_gh_be461b35d165_344.jpg\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
-					}
- 	       		
- 	       						//'<a href="'+val.detail_info.detail_url+'">'+
- 	       						//'<a href="http://map.baidu.com/mobile/">'+
- 	       	    listRestaurant +=headUrl;		
- 				listRestaurant +='<h4>'+val.title+'</h4>'+
+						tempListRestaurant="<a href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\"img/c/qrcode_for_gh_be461b35d165_344.jpg\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
+					}	
+ 				listRestaurant +="<li>"+tempListRestaurant+headUrl+'<h4>'+val.title+'</h4>'+
  								 '<p>'+val.address+'</p>'+
  								 '</a>';
+ 				
  	          	  });
- 	       	 	
- 	          	 $("#listRestaurant").html(listRestaurant);
+ 	          	$("#listRestaurant").html(listRestaurant);
+ 	          	var w = $(window).width();
+ 	            var h=$(window).height()-45-45-48;
+ 	        	$("#wrapper3").css("height",h);
+ 	            $("#scroller3>ul>li").css("width", w);
+ 	            //$("#scroller3>ul>li").css("height", h/5);
+ 	          	var myScroll = new IScroll('#wrapper3', {scrollX: true, scrollY: true, mouseWheel: true });
+ 	          	if(result.contents.length<maxCount)
+ 	             {
+ 	            	 $("#pullUpLabel3").html("");
+ 	             }
+ 	             else
+ 	        	 {
+ 	            	 $("#pullUpLabel3").html("上拉显示更多...");
+ 	        	 }
+ 	            myScroll.on('scrollEnd', function () {
+ 	            	listRestaurant="";
+ 	            	 if(Math.abs(this.y)>=Math.abs(this.maxScrollY))
+ 	            		 {
+ 	            		 	//currentIndex=currentIndex+maxCount;
+ 	            		     currentIndex++;
+ 	            		 	var url="http://api.map.baidu.com/geosearch/v3/nearby?ak=0XpknrkEnkVWwHCDHeEneVcq&geotable_id=121674&location="+longitude+","+latitude+"&q=火锅&radius=100000&page_index="+currentIndex+"&page_size="+maxCount;
+ 	            		 		$.ajax({
+ 	            		 			dataType : "jsonp",
+ 	            		 			url:url,
+ 	                		        success: function (result) {
+ 	                		        	 var listRestaurant="";
+ 	                		 	       	 var tempListRestaurant="";
+ 	                		 	       	 $(result.contents).each(function(i,val){
+ 	                		 	       		if(val.headImgUrl!=undefined)
+ 	                							{
+ 	                								headUrl= '<img src="'+val.headImgUrl.big+'">';
+ 	                								tempListRestaurant="<a href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\""+val.headImgUrl.big+"\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
+ 	                							}
+ 	                						else
+ 	                							{
+ 	                								headUrl= '<img src="img/c/qrcode_for_gh_be461b35d165_344.jpg">';
+ 	                								tempListRestaurant="<a href='#restaurantDetail'  onclick='setSessionStorage(\"lat\","+val.location[0]+");setSessionStorage(\"lng\","+val.location[1]+");setSessionStorage(\"title\",\""+val.title+"\");setSessionStorage(\"address\",\""+val.address+"\");setSessionStorage(\"headImgUrl\",\"img/c/qrcode_for_gh_be461b35d165_344.jpg\");setSessionStorage(\"uid\",\""+val.uid+"\");'>";
+ 	                							}	
+ 	                		 				listRestaurant +="<li>"+tempListRestaurant+headUrl+'<h4>'+val.title+'</h4>'+
+ 	                		 								 '<p>'+val.address+'</p>'+
+ 	                		 								 '</a>';
+ 	                		 				
+ 	                		 	          	  });
+ 	                		 	        $("#listRestaurant").append(listRestaurant);
+ 	                	 	            $("#scroller3>ul>li").css("width", w);
+ 	                	 	            //$("#scroller3>ul>li").css("height",h/5);
+ 	                	 	            setTimeout(function () {                       
+ 	                                        myScroll.refresh();
+ 	                                        myScroll.options.snap = true;
+ 	                                    }, 10);
+	 	                	 	        if(result.contents.length<maxCount)
+	 	                	             {
+	 	                	            	 $("#pullUpLabel3").html("");
+	 	                	             }
+	 	                	             else
+	 	                	        	 {
+	 	                	            	 $("#pullUpLabel3").html("上拉显示更多...");
+	 	                	        	 }
+ 	                		        }
+ 	                		 	});
+ 	            		 }
+ 	             });
  		   }
  	 });
 }
@@ -608,45 +648,76 @@ function unloadSignUp()
 //我报名的邀请
 function initRInviteInfoList()
 {
-	wx.hideOptionMenu();
+	var currentIndex=0;
+	var maxCount=10;
 	var rInviteInfoList="";
-	 var page_num=10;
+	wx.hideOptionMenu();
 	$.ajax({
-		async:false,
         url: "getRInviteInfo.action?rd="+Math.random(),
+        data:{"startIndex":currentIndex,"endIndex":maxCount},
         success: function (data) {
         	$(data).each(function(i,val){
         		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>";
         	});
-        	
         	$("#rInviteInfoList").html(rInviteInfoList);
+        	 var w = $(window).width();
+        	 var h=$(window).height()-45-48;
+        	 $("#wrapper2").css("height",h);
+             $("#scroller2>ul>li").css("width", w);
+             //$("#scroller2>ul>li").css("height", h/8);
+             var myScroll = new IScroll('#wrapper2', {scrollX: true, scrollY: true, mouseWheel: true });
+             if(data.length<maxCount)
+             {
+            	 $("#pullUpLabel2").html("");
+             }
+             else
+        	 {
+            	 $("#pullUpLabel2").html("上拉显示更多...");
+        	 }
+             myScroll.on('scrollEnd', function () {
+            	 rInviteInfoList="";
+            	 
+            	 if(Math.abs(this.y)>=Math.abs(this.maxScrollY))
+            		 {
+            		 	currentIndex=currentIndex+maxCount;
+            		 		$.ajax({
+                		        url: "getRInviteInfo.action?rd="+Math.random(),
+                		        data:{"startIndex":currentIndex,"endIndex":maxCount},
+                		        success: function (data) {
+                		        	$(data).each(function(i,val){
+                		        		rInviteInfoList +="<li><a href='#signUp' onclick='setSessionStorage(\"inviteId\","+val.inviteId+")'>您已参加 <font color='red'>"+val.weixinUser.nickname+"</font>发起的邀请 时间<font color='blue'>"+val.inviteInfo.inviteDay+"</font></a></li>";
+                		        	});
+                		        	if(rInviteInfoList!="")
+                		        	{
+	                		        	$("#rInviteInfoList").append(rInviteInfoList);
+	                		        	$("#scroller2>ul>li").css("width", w);
+	                		        	 //$("#scroller2>ul>li").css("height", h/8);
+	                		        	setTimeout(function () {                       
+	                                        myScroll.refresh();
+	                                        myScroll.options.snap = true;
+	                                    }, 10);
+	                		        	if(data.length<maxCount)
+	                		             {
+	                		            	 $("#pullUpLabel2").html("");
+	                		             }
+	                		             else
+	                		        	 {
+	                		            	 $("#pullUpLabel2").html("上拉显示更多...");
+	                		        	 }
+                		        	}
+                		        }
+                		 	});
+            		 }
+             });
         }
     });
-	
-	$(window).scroll(function(){
-        if($(document).scrollTop()>=$(document).height()-$(window).height()){
-          var div1tem = $('#rInviteInfo').height()
-          var str =''
-          $.ajax({
-              url:"getRInviteInfo.action?rd="+Math.random(),
-              beforeSend:function(){
-                $('.ajaxLoadImg').show() //显示加载时候的提示
-              },
-              success:function(ret){
-               $("#rInviteInfoList").append(ret) //将ajxa请求的数据追加到内容里面
-               $('.ajaxLoadImg').hide() //请求成功,隐藏加载提示
-              }
-          })
-        }
-      });
-      
 }
 
 //我发出的邀请
 function initSInviteInfoList()
 {
 	var currentIndex=0;
-	var maxCount=15;
+	var maxCount=10;
 	wx.hideOptionMenu();
 	var sInviteInfoList="";
 	$.ajax({
@@ -658,9 +729,19 @@ function initSInviteInfoList()
         	});
         	$("#sInviteInfoList").html(sInviteInfoList);
         	 var w = $(window).width();
+        	 var h=$(window).height()-45-48;
+        	 $("#wrapper1").css("height",h);
              $("#scroller1>ul>li").css("width", w);
+             //$("#scroller1>ul>li").css("height", h/8);
              var myScroll = new IScroll('#wrapper1', {scrollX: true, scrollY: true, mouseWheel: true });
-             $("#pullUpLabel").html("上拉显示更多...");
+             if(data.length<maxCount)
+             {
+            	 $("#pullUpLabel1").html("");
+             }
+             else
+        	 {
+            	 $("#pullUpLabel1").html("上拉显示更多...");
+        	 }
              myScroll.on('scrollEnd', function () {
             	 sInviteInfoList="";
             	 
@@ -676,10 +757,19 @@ function initSInviteInfoList()
                 		        	});
                 		        	$("#sInviteInfoList").append(sInviteInfoList);
                 		        	$("#scroller1>ul>li").css("width", w);
+                		        	 //$("#scroller1>ul>li").css("height", h/8);
                 		        	setTimeout(function () {                       
                                         myScroll.refresh();
-                                        myScroll.options.snap = true;
+                                        myScroll.options.snap = false;
                                     }, 10);
+                		        	if(data.length<maxCount)
+                		             {
+                		            	 $("#pullUpLabel1").html("");
+                		             }
+                		             else
+                		        	 {
+                		            	 $("#pullUpLabel1").html("上拉显示更多...");
+                		        	 }
                 		        }
                 		 	});
             		 }

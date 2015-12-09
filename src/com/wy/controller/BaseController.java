@@ -160,11 +160,15 @@ public class BaseController {
 	
 	@RequestMapping("/getRInviteInfo")
 	@ResponseBody
-	public List<JoinInfo> getRInviteInfo(HttpSession session){
+	public List<JoinInfo> getRInviteInfo(HttpSession session,String startIndex,String endIndex){
+		Map map=new HashMap();
 		SNSUserInfo snsUserInfo=(SNSUserInfo) session.getAttribute("snsUserInfo");
 		if(snsUserInfo!=null)
 		{
-		List<JoinInfo> joinInfoList=joinInfoService.selectMySignInfo(snsUserInfo.getOpenId());
+		map.put("openId",snsUserInfo.getOpenId());
+		map.put("startIndex", startIndex);
+		map.put("endIndex", endIndex);
+		List<JoinInfo> joinInfoList=joinInfoService.selectMySignInfo(map);
 		return joinInfoList;
 		}
 		else

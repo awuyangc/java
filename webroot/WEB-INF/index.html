@@ -160,8 +160,15 @@
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>我报名的邀请</h1>
 					</header>
-					<div style="height:100%;overflow-y:auto">
-						<ul class="list" id="rInviteInfoList"></ul>
+					<div class="wrapper" id="wrapper2">
+						<div class="scroller" id="scroller2">
+							<ul id="rInviteInfoList"></ul>
+						<div id="pullUp" class="ub ub-pc c-gra">
+	                        <div id="pullUpIcon"></div>
+	                        <div id="pullUpLabel2"></div>
+	                        <div id="bg">加载中...</div>
+                   		 </div>
+						</div>
 					</div>
 				</div>
 
@@ -174,11 +181,11 @@
 					<div class="wrapper" id="wrapper1">
 						<div class="scroller" id="scroller1">
 							<ul id="sInviteInfoList"></ul>
-						<div id="pullUp" class="ub ub-pc c-gra">
-	                        <div id="pullUpIcon"></div>
-	                        <div id="pullUpLabel"></div>
-	                        <div id="bg">加载中...</div>
-                   		 </div>
+							<div id="pullUp" class="ub ub-pc c-gra">
+		                        <div id="pullUpIcon"></div>
+		                        <div id="pullUpLabel1"></div>
+		                        <div id="bg">加载中...</div>
+	                   		 </div>
 						</div>
 					</div>
 				</div>
@@ -235,21 +242,29 @@
 						<a href="javascript:;" class="button backButton">返回</a>
 						<h1>选择餐厅</h1>
 					</header>
-					<div class="content">
-					<div class="grid">
-						<div
-							style="width: 20%; float: left; font-size: 20px; text-align: center">区域</div>
-						<div
-							style="width: 20%; float: left; font-size: 20px; text-align: center">风味</div>
-						<div
-							style="width: 20%; float: left; font-size: 20px; text-align: center">价格</div>
-						<div
-							style="width: 20%; float: left; font-size: 20px; text-align: center">评级</div>
-						<div
-							style="width: 20%; float: left; font-size: 20px; text-align: center">其它</div>
+					<div class="grid topToolbar">
+							<div
+								style="width: 20%; float: left; font-size: 20px; text-align: center">区域</div>
+							<div
+								style="width: 20%; float: left; font-size: 20px; text-align: center">风味</div>
+							<div
+								style="width: 20%; float: left; font-size: 20px; text-align: center">价格</div>
+							<div
+								style="width: 20%; float: left; font-size: 20px; text-align: center">评级</div>
+							<div
+								style="width: 20%; float: left; font-size: 20px; text-align: center">其它</div>
+						</div>
+				    <div class="wrapper" id="wrapper3" style="top:90px">
+						<div class="scroller" id="scroller3">
+							<ul id="listRestaurant"></ul>
+							<div id="pullUp" class="ub ub-pc c-gra">
+		                        <div id="pullUpIcon"></div>
+		                        <div id="pullUpLabel3"></div>
+		                        <div id="bg">加载中...</div>
+	                   		 </div>
+						</div>
 					</div>
-						  <div class="list-group" id="listRestaurant"></div>
-					</div>
+					
 				</div>
 
 				<div class="panel" data-title="餐厅地图定位" id="restaurantDetail"

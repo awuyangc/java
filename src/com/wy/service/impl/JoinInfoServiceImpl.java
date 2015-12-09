@@ -1,6 +1,7 @@
 package com.wy.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -65,9 +66,9 @@ public class JoinInfoServiceImpl implements IJoinInfoService {
 	}
 
 	@Override
-	public List<JoinInfo> selectMySignInfo(String openId) {
+	public List<JoinInfo> selectMySignInfo(Map map) {
 		// TODO Auto-generated method stub
-		return joinInfoMapper.selectMySignInfo(openId);
+		return joinInfoMapper.selectMySignInfo(map);
 	}
 
 }

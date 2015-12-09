@@ -3,6 +3,7 @@ package com.wy.dao;
 import com.wy.model.JoinInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface JoinInfoMapper {
 
@@ -24,7 +25,7 @@ public interface JoinInfoMapper {
 	 */
 	JoinInfo selectByPrimaryKey(Integer id);
 	JoinInfo checkMySignInfo(JoinInfo joinInfo);
-	List<JoinInfo> selectMySignInfo(String openId);
+	List<JoinInfo> selectMySignInfo(Map map);
 	
 	List<JoinInfo> selectByInviteId(Integer inviteId);
 	/**

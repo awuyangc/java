@@ -1,6 +1,8 @@
 package com.wy.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.wy.model.JoinInfo;
 
 public interface IJoinInfoService {
@@ -12,5 +14,5 @@ public interface IJoinInfoService {
 	public void delete(Integer id);
 	public void deleteByInviteId(JoinInfo joinInfo);
 	public JoinInfo checkMySignInfo(JoinInfo joinInfo);
-	public List<JoinInfo> selectMySignInfo(String openId);
+	public List<JoinInfo> selectMySignInfo(Map map);
 }
